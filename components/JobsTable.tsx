@@ -19,15 +19,18 @@ import { Input } from "./ui/input"
 export function JobsTable({ jobs }: { jobs: Job[] }) {
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('');
-  let jobsToDisplay: Job[] = jobs;
-
-  if(query){
-    jobsToDisplay = jobs.filter((job) => job.title.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
-  }
-
-  if(status){
-    jobsToDisplay = jobs.filter((job) => job.status.toLocaleLowerCase().includes(status.toLocaleLowerCase()));
-  }
+  const jobsToDisplay = jobs.filter((job) => {
+    const matchesQuery = query
+        ? job.title.toLowerCase().includes(query.toLowerCase())
+        : true;
+    
+      const matchesStatus = status
+        ? job.status.toLowerCase() === status.toLowerCase()
+        : true;
+    
+      return matchesQuery && matchesStatus;
+  });
+  
 
   if(jobs.length < 1){
     return(

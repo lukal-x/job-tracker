@@ -6,6 +6,7 @@ const initialFormState = {
   isSubmitting: false,
   isError: false,
   errorMessage: "",
+  fileName: "",
 };
 
 export function FileImportForm() {
@@ -13,7 +14,7 @@ export function FileImportForm() {
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setFormState({ isSubmitting: true, isError: false, errorMessage: "" });
+    setFormState((perv) => ({...perv, isSubmitting: true}));
 
     const form = e.currentTarget;
     const fileInput = form.elements.namedItem("text") as HTMLInputElement;
@@ -24,6 +25,7 @@ export function FileImportForm() {
         isSubmitting: false,
         isError: true,
         errorMessage: "No file selected",
+        fileName: ""
       });
       return;
     }
@@ -46,13 +48,14 @@ export function FileImportForm() {
         throw new Error(message);
       }
 
-      setFormState({ isSubmitting: false, isError: false, errorMessage: "" });
+      setFormState((perv) => ({...perv, isSubmitting: false}));
       window.location.reload();
     } catch (err: any) {
       setFormState({
         isSubmitting: false,
         isError: true,
         errorMessage: err.message || "Unexpected error",
+        fileName: ''
       });
     }
   };

@@ -16,22 +16,10 @@ import JobFilters from "@/features/filters/components/JobFilters"
 import { Job } from "../types"
 import { Button } from "@/components/ui/button"
 import { Building2, Save, X } from "lucide-react"
+import { useFilters } from "@/features/filters/hooks/useFilters"
 
 export function JobsTable({ jobs }: { jobs: Job[] }) {
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState('');
-  const [isStatusChanged, setIsStatusChanged] = useState(false);
-  const jobsToDisplay = jobs.filter((job) => {
-    const matchesQuery = query
-        ? job.title.toLowerCase().includes(query.toLowerCase())
-        : true;
-    
-      const matchesStatus = status
-        ? job.status.toLowerCase() === status.toLowerCase()
-        : true;
-    
-      return matchesQuery && matchesStatus;
-  });
+  const { jobsToDisplay, isStatusChanged, query, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs);
   const updateFormRef = useRef<HTMLFormElement | null>(null);
   
 
@@ -45,11 +33,11 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
 
   return (
         <form ref={updateFormRef} className="w-full" action={bulkUpdateJobStatuses}>
-            <div className="md:flex items-center grid w-full justify-between mt-10">
+            <div className="md:flex items-center grid w-full justify-between">
               <JobFilters status={status} searchTerm={query} isDisabled={isStatusChanged} handleSearch={(e) => setQuery(e.target.value)} reset={() => {setStatus(""); setQuery("")}} showApplied={() => setStatus("APPLIED")} showInterview={() => setStatus("INTERVIEW")}  showRejected={() => setStatus("REJECTED")}/>
               {isStatusChanged && (
                 <div className="flex gap-2">
-                  <Button type="button" onClick={() => {updateFormRef.current?.reset(); setIsStatusChanged(false)}} size={'sm'}><Save /><X />Cancel</Button>
+                  <Button type="button" onClick={() => {updateFormRef.current?.reset(); setIsStatusChanged(false)}} size={'sm'}><X />Cancel</Button>
                   <Button size={'sm'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
                 </div>
               )}

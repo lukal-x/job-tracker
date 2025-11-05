@@ -14,7 +14,7 @@ export default function MailsPags() {
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
       <div className="w-5xl p-3 grid place-items-center gap-3">
         <span>mails</span>
-        {mails.map((mail, i) => (
+        {mails ? mails?.map((mail, i) => (
             <Card className="w-full h-auto" key={i}>
                 <CardHeader>
                     <CardTitle className="font-normal">Sender: {mail.from}</CardTitle>
@@ -26,7 +26,7 @@ export default function MailsPags() {
                     <p>{mail.snippet}</p>
                 </CardContent>
             </Card>
-        ))}
+        )) : null}
       </div>
     </main>
   );

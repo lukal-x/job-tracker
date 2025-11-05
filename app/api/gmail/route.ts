@@ -1,6 +1,7 @@
 import { db } from "@/lib/db";
 import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
+import { title } from "process";
 
 export async function GET(req: NextRequest) {
   try{
@@ -41,7 +42,7 @@ export async function GET(req: NextRequest) {
     );
 
     // This is just workaround to filter currently spam senders in my case, will use built in mehtods form GmailAPi latter in production
-    const spamSenders = ["Shoppster", "Google", "Jew", "Kryptosino", "Phil", "Reddit", "JobLeads", "Phil @ZipRecuiter", "Vercel", "Grammarly", "AIApply", "The Frontier"];
+    const spamSenders = ["Shoppster", "Google", "facebook", "Lorber", "Jooble", "Jew", "Kryptosino", "Phil", "Reddit", "JobLeads", "Phil @ZipRecuiter", "Vercel", "Grammarly", "AIApply", "The Frontier"];
     const rawJobTitles = await db.job.findMany({
       select: {
         title: true
@@ -56,9 +57,11 @@ export async function GET(req: NextRequest) {
       return !spamSenders.some((spam) => mail.from.includes(spam));
     });
 
-    // filteredMails = filteredMails.filter((mail) => {
-    //   return jobTitles.some((title) => mail.from.includes(title).toLowerCase());
-    // })
+    filteredMails = filteredMails.filter((mail) => {
+      return parsedJobTitles.some((title) => mail.subject.toLowerCase().includes(title.toLowerCase() || 'frontend' || 'developer' || 'applying' || 'application')
+                                          || mail.from.toLowerCase().includes(title.toLowerCase() || 'frontend' || 'developer' || 'applying' || 'application') 
+                                          || mail.snippet.toLowerCase().includes(title.toLowerCase() || 'frontend' || 'developer' || 'applying' || 'application'));
+    });
 
     return new Response(JSON.stringify(filteredMails), { status: 200 });
   }

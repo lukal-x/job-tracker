@@ -6,7 +6,7 @@ import { sanitizeLabColors } from "@/helpers";
 import { useState } from "react";
 import Loader from "@/components/Loader";
 
-const ExportToPdf = ({ tableRef }: { tableRef: any }) => {
+const ExportToPdf = ({ tableRef, isDisabled }: { tableRef: any, isDisabled: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
   
   const handleDownloadPdf = async () => {
@@ -32,7 +32,7 @@ const ExportToPdf = ({ tableRef }: { tableRef: any }) => {
     
   return (
     <div>
-        <Button onClick={handleDownloadPdf}><Download />Export To PDF</Button>
+        <Button disabled={isDisabled} onClick={handleDownloadPdf}><Download />Export To PDF</Button>
     </div>
   )
 }

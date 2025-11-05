@@ -61,7 +61,7 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
   return (
         <>
           <div className="flex w-full justify-between">
-            {isTableReady && <ExportToPdf tableRef={tableRef.current} />}
+            {isTableReady && <ExportToPdf isDisabled={selectedRows.length > 0} tableRef={tableRef.current} />}
             <FileImportForm isDisabled={selectedRows.length > 0} />
           </div>
           <form ref={updateFormRef} className="w-full" action={bulkUpdateJobStatuses}>

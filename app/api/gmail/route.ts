@@ -60,7 +60,7 @@ export async function GET(req: NextRequest) {
     //   return jobTitles.some((title) => mail.from.includes(title).toLowerCase());
     // })
 
-    return new Response(JSON.stringify(detailed), { status: 200 });
+    return new Response(JSON.stringify(filteredMails), { status: 200 });
   }
   catch(err){
     return NextResponse.json({ error: err }, { status: 500 });

@@ -17,13 +17,16 @@ import { Job } from "../types"
 import { Button } from "@/components/ui/button"
 import { Building2, Mic, Save, Trash, X } from "lucide-react"
 import { useFilters } from "@/features/filters/hooks/useFilters"
-import { updateRecordsStatus } from "@/features/batch-actions/services/batch-actions-service"
+import { deleteRecords, updateRecordsStatus } from "@/features/batch-actions/services/batch-actions-service"
+import { FileImportForm } from "@/features/jobs-import/components/ImportForm"
+import ExportToPdf from "@/features/jobs-export/components/ExportToPdf"
 
 export function JobsTable({ jobs }: { jobs: Job[] }) {
   const { jobsToDisplay, isStatusChanged, query, status, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs);
   const updateFormRef = useRef<HTMLFormElement | null>(null);
+  const tableRef = useRef<any>(null);
   const [selectedRows, setSelectedRows] = useState<string[]>([]);
-
+  const [isTableReady, setIsTableReady] = useState(false);
 
   const checkAllRows = (e: any, jobs: Job[]) => {
     if (e.target.checked) {
@@ -41,6 +44,12 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
     }
   };
 
+  useEffect(() => {
+    if (tableRef.current) {
+      setIsTableReady(true);
+    }
+  }, []);
+
   if(jobs.length < 1){
     return(
       <div className="w-full h-full flex justify-center">
@@ -50,31 +59,36 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
   }
 
   return (
-        <form ref={updateFormRef} className="w-full" action={bulkUpdateJobStatuses}>
-            <div className="md:flex items-center grid w-full justify-between">
-              <JobFilters status={status} searchTerm={query} isDisabled={isStatusChanged} handleSearch={(e) => setQuery(e.target.value)} reset={() => {setStatus(""); setQuery("")}} showApplied={() => setStatus("APPLIED")} showInterview={() => setStatus("INTERVIEW")}  showRejected={() => setStatus("REJECTED")}/>
-              {isStatusChanged && (
-                <div className="flex gap-2">
-                  <Button type="button" onClick={() => {updateFormRef.current?.reset(); setIsStatusChanged(false)}} size={'sm'}><X />Cancel</Button>
-                  <Button size={'sm'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
-                </div>
-              )}
-            </div>
-            {selectedRows.length > 0 && (
-              <div className="w-full mt-3 flex items-center justify-between">
-                <span className="font-medium">Selected Records ({selectedRows.length})</span>
-                <div className="flex gap-2 items-center">
-                  <Button onClick={async () => await updateRecordsStatus(selectedRows, "INTERVIEW") } variant={'outline'}><Mic />Mark As Interview</Button>
-                  <Button variant={'outline'} size={'sm'}><X />Mark As Rejected</Button>
-                  <Button variant={'destructive'} size={'sm'}><Trash />Delete {selectedRows.length} records</Button>
-                </div>
+        <>
+          <div className="flex w-full justify-between">
+            {isTableReady && <ExportToPdf tableRef={tableRef.current} />}
+            <FileImportForm isDisabled={selectedRows.length > 0} />
+          </div>
+          <form ref={updateFormRef} className="w-full" action={bulkUpdateJobStatuses}>
+          <div className="md:flex items-center grid w-full justify-between">
+            <JobFilters status={status} searchTerm={query} isDisabled={isStatusChanged} handleSearch={(e) => setQuery(e.target.value)} reset={() => { setStatus(""); setQuery("") } } showApplied={() => setStatus("APPLIED")} showInterview={() => setStatus("INTERVIEW")} showRejected={() => setStatus("REJECTED")} />
+            {isStatusChanged && (
+              <div className="flex gap-2">
+                <Button type="button" onClick={() => { updateFormRef.current?.reset(); setIsStatusChanged(false) } } size={'sm'}><X />Cancel</Button>
+                <Button size={'sm'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
               </div>
             )}
-            <Table className="mt-5 border">
+          </div>
+          {selectedRows.length > 0 && (
+            <div className="w-full mt-3 flex items-center justify-between">
+              <span className="font-medium">Selected Records ({selectedRows.length})</span>
+              <div className="flex gap-2 items-center">
+                <Button type="button" onClick={async () => await updateRecordsStatus(selectedRows, "INTERVIEW")} variant={'outline'}><Mic />Mark As Interview</Button>
+                <Button type="button" variant={'outline'} size={'sm'}><X />Mark As Rejected</Button>
+                <Button type="button" onClick={async () => {await deleteRecords(selectedRows); location.reload();}} variant={'destructive'} size={'sm'}><Trash />Delete {selectedRows.length} records</Button>
+              </div>
+            </div>
+          )}
+          <Table ref={tableRef} className="mt-5 border">
             <TableCaption>A list of your recent job applications.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead><input checked={selectedRows.length === jobs.length} onChange={(e) => checkAllRows(e, jobs)} type="checkbox" /></TableHead>
+                <TableHead><input data-html2canvas-ignore checked={selectedRows.length === jobs.length} onChange={(e) => checkAllRows(e, jobs)} type="checkbox" /></TableHead>
                 <TableHead className="w-[100px] flex items-center gap-2"><Building2 size={20} strokeWidth={1} />Company</TableHead>
                 <TableHead>Applied At</TableHead>
                 <TableHead>Status</TableHead>
@@ -83,7 +97,7 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
             <TableBody>
               {jobsToDisplay.map((job) => (
                 <TableRow key={job.id}>
-                  <TableCell><input value={job.id} checked={selectedRows.includes(job.id)} onChange={(e) => checkSingleRow(e, job.id)} type="checkbox"  /></TableCell>
+                  <TableCell><input data-html2canvas-ignore value={job.id} checked={selectedRows.includes(job.id)} onChange={(e) => checkSingleRow(e, job.id)} type="checkbox" /></TableCell>
                   <TableCell className="font-medium">{job.title}</TableCell>
                   <TableCell className="text-gray-600">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
                   <TableCell className={getTextColor(job.status)}>
@@ -92,8 +106,8 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
                       <option value={job.status}>{job.status}</option>
                       {job.status === "APPLIED" ? (
                         <>
-                        <option value="REJECTED">REJECTED</option>
-                        <option value="INTERVIEW">INTERVIEW</option>
+                          <option value="REJECTED">REJECTED</option>
+                          <option value="INTERVIEW">INTERVIEW</option>
                         </>
                       ) : null}
                     </select>
@@ -103,10 +117,11 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
             </TableBody>
             <TableFooter>
               <TableRow>
-                <TableCell colSpan={3}>Total {jobs.length}</TableCell>
+                <TableCell colSpan={5}><span className="font-medium">Total {jobsToDisplay.length}</span></TableCell>
               </TableRow>
             </TableFooter>
           </Table>
         </form>
+      </>
   )
 }

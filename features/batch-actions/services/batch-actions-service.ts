@@ -9,9 +9,13 @@ export async function updateRecordsStatus(ids: string[], status: string){
     }
 }
 
-export async function deleteRecords(ids: string[]){
+export async function deleteRecords(recordsIds: string[]){
     try{
-        return axios.delete('/batch', { data: ids })
+        return axios.request({
+            url: '/api/batch',
+            method: 'DELETE',
+            data: { recordsIds }
+          });
     }
     catch(err){
         throw new Error("Error while deleting records");

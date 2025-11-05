@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Button } from "../../../components/ui/button";
-import { File } from "lucide-react";
+import { File, Info, Upload } from "lucide-react";
 
 const initialFormState = {
   isSubmitting: false,
@@ -10,7 +10,7 @@ const initialFormState = {
   fileName: "",
 };
 
-export function FileImportForm() {
+export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
   const [formState, setFormState] = useState(initialFormState);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -62,27 +62,32 @@ export function FileImportForm() {
   };
 
   return (
-    <form onSubmit={handleFormSubmit} className="flex items-center gap-2">
-      {formState.isError && (
-        <span className="text-red-500 text-sm ml-2">
-          {formState.errorMessage}
-        </span>
-      )}
-      <input
-        type="file"
-        id="text"
-        accept=".txt"
-        className="hidden"
-        name="text"
-      />
-      <label htmlFor="text">
-        <Button type="button" asChild>
-          <span><File /> Import</span>
+    <form onSubmit={handleFormSubmit} className="flex justify-between items-center gap-2">
+      {/* <span className="flex gap-2 text-xs text-gray-400 items-center"><Info size={15} /> Supported files to import is .txt files, and must contain "-" between each job title.</span> */}
+      
+      <div className="items-center gap-2 flex">
+        {formState.isError && (
+          <span className="text-red-500 text-sm ml-2">
+            {formState.errorMessage}
+          </span>
+        )}
+        <input
+          disabled={isDisabled}
+          type="file"
+          id="text"
+          accept=".txt"
+          className="hidden"
+          name="text"
+        />
+        <label htmlFor="text">
+          <Button disabled={isDisabled} className={`${isDisabled && 'opacity-50'}`} type="button" asChild>
+            <span><Upload /> Import</span>
+          </Button>
+        </label>
+        <Button type="submit" disabled={formState.isSubmitting || isDisabled}>
+          {formState.isSubmitting ? "Uploading..." : "Submit"}
         </Button>
-      </label>
-      <Button type="submit" disabled={formState.isSubmitting}>
-        {formState.isSubmitting ? "Uploading..." : "Submit"}
-      </Button>
+      </div>
     </form>
   );
 }

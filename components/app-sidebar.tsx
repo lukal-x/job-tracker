@@ -21,19 +21,14 @@ import SignInButton from "./SingIn"
 const items = [
   {
     title: "Jobs List",
-    url: "#",
+    url: "/",
     icon: ScrollText,
   },
   {
-    title: "Mails",
-    url: "#",
+    title: "Mails (Early Access)",
+    url: "/mails",
     icon: Inbox,
-  },
-  {
-    title: "Stats",
-    url: "#",
-    icon: ChartArea,
-  },
+  }
 ]
 
 export function AppSidebar() {

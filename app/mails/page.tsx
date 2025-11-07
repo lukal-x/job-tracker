@@ -11,14 +11,14 @@ export default function MailsPags() {
 
 
   if(isLoading){
-    return <Loader type="WAITING_FOR_PDF" />
+    return <Loader type="NORMAL" />
   }
 
   return (
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
       <div className="w-5xl p-3 grid place-items-center gap-3 mt-14">
-        <FiltersToolbar filterType="EMAILS" isDisabled={false} searchTerm={query} status={status} handleSearch={(e) => setQuery(e.target.value)} showApplied={() => {}} showInterview={() => {}} showRejected={() => {}} reset={() => {}}  />
-        {mailsToDislplay ? mailsToDislplay?.map((mail: Email, i: number) => (
+        {mailsToDislplay.length > 0 && !isLoading && <FiltersToolbar filterType="EMAILS" isDisabled={false} searchTerm={query} status={status} handleSearch={(e) => setQuery(e.target.value)} showApplied={() => {}} showInterview={() => {}} showRejected={() => {}} reset={() => {}}  />      }
+        {mailsToDislplay.length > 0 && !isLoading ? mailsToDislplay?.map((mail: Email, i: number) => (
             <Card className="w-full h-auto" key={i}>
                 <CardHeader>
                     <CardTitle className="font-semibold">{mail.from}</CardTitle>
@@ -30,7 +30,7 @@ export default function MailsPags() {
                     <p>{mail.snippet}</p>
                 </CardContent>
             </Card>
-        )) : null}
+        )) : <span className="text-gray-400 mt-20">Cannot fetch emails right now :/</span>}
       </div>
     </main>
   );

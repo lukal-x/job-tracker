@@ -21,7 +21,7 @@ import { deleteRecords, updateRecordsStatus } from "@/features/batch-actions/ser
 import { FileImportForm } from "@/features/jobs-import/components/ImportForm"
 import ExportToPdf from "@/features/jobs-export/components/ExportToPdf"
 
-export function JobsTable({ jobs }: { jobs: Job[] }) {
+export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean }) {
   const { filteredData: jobsToDisplay, isStatusChanged, query, status, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");
   const updateFormRef = useRef<HTMLFormElement | null>(null);
   const tableRef = useRef<any>(null);
@@ -50,7 +50,7 @@ export function JobsTable({ jobs }: { jobs: Job[] }) {
     }
   }, []);
 
-  if(jobs.length < 1){
+  if(!isLoading && jobs.length < 1){
     return(
       <div className="w-full h-full flex justify-center">
           <span className="text-gray-400">Start importing jobs.</span>

@@ -4,7 +4,7 @@ import { fetchJobs } from "../services/jobs-display-service";
 
 export function useFetchJobs(){
     const [jobs, setJobs] = useState<Job[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         async function handleFetchJobs(){

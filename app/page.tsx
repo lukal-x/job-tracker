@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
       <div className="w-5xl p-3 grid place-items-center gap-5">
-        <JobsTable  jobs={jobs ?? []} />
+        <JobsTable isLoading={isLoading} jobs={jobs ?? []} />
       </div>
     </main>
   );

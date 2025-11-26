@@ -1,6 +1,5 @@
 "use server"
 import { db } from "@/lib/db";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function bulkUpdateJobStatuses(formData: FormData) {
@@ -16,6 +15,5 @@ export async function bulkUpdateJobStatuses(formData: FormData) {
     });
   }
 
-  revalidatePath("/");
   redirect("/"); 
 }

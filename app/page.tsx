@@ -1,8 +1,8 @@
 "use client"
-import { JobsTable } from "@/features/jobs-display/components/JobsTable";
+import { JobsTable } from "@/features/jobs/jobs-display/components/JobsTable";
 import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
-import { fetchJobs } from "@/features/jobs-display/services/jobs-display-service";
+import { fetchJobs } from "@/features/jobs/jobs-display/services/jobs-display-service";
 
 export default function Home() {
   const { data, isLoading } = useQuery({

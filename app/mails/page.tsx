@@ -1,7 +1,7 @@
 "use client"
 import Loader from "@/components/Loader";
-import FiltersToolbar from "@/features/filters/components/FiltersToolbars";
-import { useFilters } from "@/features/filters/hooks/useFilters";
+import FiltersToolbar from "@/features/jobs/job-filters/components/FiltersToolbars";
+import { useFilters } from "@/features/jobs/job-filters/hooks/useFilters";
 import EmailCard from "@/features/mails/components/EmailCard";
 import { Email, useFetchMails } from "@/features/mails/hooks/useFetchMails";
 

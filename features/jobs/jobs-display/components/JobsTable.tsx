@@ -10,17 +10,17 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getTextColor } from "@/helpers"
-import { bulkUpdateJobStatuses } from "@/features/batch-actions/server-actions/formActions"
+import { bulkUpdateJobStatuses } from "@/features/jobs/jobs-display/server-actions/formActions"
 import { useEffect, useRef, useState } from "react"
-import JobFilters from "@/features/filters/components/FiltersToolbars"
+import JobFilters from "@/features/jobs/job-filters/components/FiltersToolbars"
 import { Job } from "../types"
 import { Button } from "@/components/ui/button"
 import { Building2, Save, X } from "lucide-react"
-import { useFilters } from "@/features/filters/hooks/useFilters"
-import { FileImportForm } from "@/features/jobs-import/components/ImportForm"
-import ExportToPdf from "@/features/jobs-export/components/ExportToPdf"
+import { useFilters } from "@/features/jobs/job-filters/hooks/useFilters"
+import ExportToPdf from "@/features/pdf-export/components/ExportToPdf"
 import UpdateJobStatusButtons from "./UpdateJobStatusButtons"
 import { useSelectRows } from "../hooks/useSelectRows"
+import { FileImportForm } from "../../jobs-import/components/ImportForm"
 
 export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean }) {
   const { filteredData: jobsToDisplay, isStatusChanged, query, status, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");

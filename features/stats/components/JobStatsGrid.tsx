@@ -1,5 +1,5 @@
 import { Card, CardTitle, CardContent } from '@/components/ui/card'
-import { FileText, Mic, X, CalendarCheck } from 'lucide-react'
+import { FileText, Mic, X, CalendarCheck, Calendar1 } from 'lucide-react'
 import { StatsData } from '../types'
 
 const JobStatsGrid = ({ data }: { data: StatsData | undefined }) => {
@@ -9,6 +9,12 @@ const JobStatsGrid = ({ data }: { data: StatsData | undefined }) => {
                 <CardTitle className='flex items-center gap-2'><FileText strokeWidth={1} />Total Applies</CardTitle>
             <CardContent>
                 <b className='text-xl'>{data?.totalApplies}</b>
+            </CardContent>
+        </Card>
+        <Card className='gird place-items-center'>
+                <CardTitle className='flex gap-2 items-center'><Calendar1 strokeWidth={1} />Total Acitve Days</CardTitle>
+            <CardContent>
+                <b className='text-xl'>{data?.activeDays.length}</b>
             </CardContent>
         </Card>
         <Card className='gird place-items-center'>
@@ -27,6 +33,12 @@ const JobStatsGrid = ({ data }: { data: StatsData | undefined }) => {
                 <CardTitle className='flex gap-2 items-center'><CalendarCheck strokeWidth={1} />Average Applies</CardTitle>
             <CardContent>
                 <b className='text-xl'>{data?.averageAppliesPerDay} / <span className='font-normal text-lg'>per day</span></b>
+            </CardContent>
+        </Card>
+        <Card className='gird place-items-center'>
+                <CardTitle className='flex gap-2 items-center'><CalendarCheck strokeWidth={1} />Interviews Percentage Rate</CardTitle>
+            <CardContent>
+                <b className='text-xl'>{data?.interviewsPercentage} %</b>
             </CardContent>
         </Card>
     </section>

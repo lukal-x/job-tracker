@@ -40,12 +40,18 @@ export async function GET(req: Request){
         //  4. All applying days (dates)
         //  5. Average applies per day
         //  6. Number of applies on each day
+        //  7. All active days.
+        //  8. Percentage of interview calls
         
         const totalApplies = jobs.length;
-        const totalRejected = jobs.filter((job) => job.status === "REJECTED")
+        const totalRejected = jobs.filter((job) => job.status === "REJECTED");
         const totalInterviews = jobs.filter((job) => job.status === "INTERVIEW");
         const totalApplyingDays = allAppliedDates;
         const averageAppliesPerDay = Math.floor(totalApplies / allAppliedDates.length);
+        const activeDays = allAppliedDates;
+        const interviewsPercentage = totalApplies > 0 
+            ? Math.floor((totalInterviews.length / totalApplies) * 100) 
+            : 0;
 
         // Calculate the amount of applies for each applying day.
         const appliesPerDay: Record<string, number> = {};
@@ -55,7 +61,7 @@ export async function GET(req: Request){
         }
         
 
-        return NextResponse.json({ totalApplies, totalInterviews, totalRejected, appliesPerDay, averageAppliesPerDay }, { status: 200 });
+        return NextResponse.json({ totalApplies, totalInterviews, totalRejected, appliesPerDay, averageAppliesPerDay, activeDays, interviewsPercentage }, { status: 200 });
     }
     catch(err){
         return NextResponse.json({ error: err }, { status: 500 });

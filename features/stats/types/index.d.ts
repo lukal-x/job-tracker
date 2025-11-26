@@ -3,5 +3,7 @@ export interface StatsData {
     totalInterviews: Job[];
     totalRejected: Job[];
     appliesPerDay: any;
-    averageAppliesPerDay: number
+    averageAppliesPerDay: number;
+    activeDays: string[];
+    interviewsPercentage: number
 }

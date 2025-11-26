@@ -52,7 +52,7 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
             <FileImportForm isDisabled={selectedRows.length > 0} />
           </div>
 
-          <form ref={updateFormRef} className="w-full" action={bulkUpdateJobStatuses}>
+          <form ref={updateFormRef} className="w-full">
           <div className="md:flex items-center grid w-full justify-between">
             <JobFilters filterType="JOBS" status={status} searchTerm={query} isDisabled={isStatusChanged} handleSearch={(e) => setQuery(e.target.value)} reset={() => { setStatus(""); setQuery("") } } showApplied={() => setStatus("APPLIED")} showInterview={() => setStatus("INTERVIEW")} showRejected={() => setStatus("REJECTED")} />
             {isStatusChanged && (

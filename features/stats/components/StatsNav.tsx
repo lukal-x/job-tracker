@@ -10,7 +10,6 @@ const StatsNav = ({ range, onChange }: { range: any, onChange: (e: any) => void 
                     value={range}
                     onChange={onChange}
                     >
-                    <option value="3d">Last 3 days</option>
                     <option value="7d">Last 7 days</option>
                     <option value="30d">Last 30 days</option>
                     <option value="90d">Last 90 days</option>

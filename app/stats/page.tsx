@@ -8,7 +8,6 @@ import JobStatsGrid from '@/features/stats/components/JobStatsGrid'
 import StatsNav from '@/features/stats/components/StatsNav'
 
 const ranges = {
-    "3d": 3,
     "7d": 7,
     "30d": 30,
     "90d": 90,

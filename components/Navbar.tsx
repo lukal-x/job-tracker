@@ -1,10 +1,10 @@
 "use client"
-import SignInButton from './AuthToggler'
+import { ModeToggle } from './theme-toggler'
 
 const Navbar = () => {
   return (
-    <div className='w-full h-[60px] shadow-md  bg-gray-50 z-9999 flex items-center px-10 justify-end'>
-        <SignInButton />
+    <div className='w-full h-[60px] z-9999 flex items-center px-10 justify-end'>
+        <ModeToggle />
     </div>
   )
 }

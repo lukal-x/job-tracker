@@ -16,6 +16,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import SignInButton from "./AuthToggler"
+import { ModeToggle } from "./theme-toggler"
 
 const items = [
   {
@@ -64,7 +65,7 @@ export function AppSidebar() {
           </SidebarGroup>
         </div>
 
-        <SidebarFooter className="px-3 pt-4 border-t">
+        <SidebarFooter className="px-3 flex pt-4 border-t">
           <SignInButton />
         </SidebarFooter>
       </SidebarContent>

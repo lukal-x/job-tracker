@@ -10,7 +10,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getTextColor } from "@/helpers"
-import { bulkUpdateJobStatuses } from "@/features/jobs/jobs-display/server-actions/formActions"
 import { useEffect, useRef, useState } from "react"
 import JobFilters from "@/features/jobs/job-filters/components/FiltersToolbars"
 import { Job } from "../types"
@@ -21,6 +20,7 @@ import ExportToPdf from "@/features/pdf-export/components/ExportToPdf"
 import UpdateJobStatusButtons from "./UpdateJobStatusButtons"
 import { useSelectRows } from "../hooks/useSelectRows"
 import { FileImportForm } from "../../jobs-import/components/ImportForm"
+import { bulkUpdateJobStatuses } from "../server-actions/bulkUpdateJobStatus"
 
 export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean }) {
   const { filteredData: jobsToDisplay, isStatusChanged, query, status, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");
@@ -52,13 +52,13 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
             <FileImportForm isDisabled={selectedRows.length > 0} />
           </div>
 
-          <form ref={updateFormRef} className="w-full">
+          <form ref={updateFormRef} action={bulkUpdateJobStatuses} className="w-full">
           <div className="md:flex items-center grid w-full justify-between">
             <JobFilters filterType="JOBS" status={status} searchTerm={query} isDisabled={isStatusChanged} handleSearch={(e) => setQuery(e.target.value)} reset={() => { setStatus(""); setQuery("") } } showApplied={() => setStatus("APPLIED")} showInterview={() => setStatus("INTERVIEW")} showRejected={() => setStatus("REJECTED")} />
             {isStatusChanged && (
-              <div className="flex gap-2">
-                <Button type="button" onClick={() => { updateFormRef.current?.reset(); setIsStatusChanged(false) } } size={'sm'}><X />Cancel</Button>
-                <Button size={'sm'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
+              <div className="flex gap-2 ml-2">
+                <Button type="button" onClick={() => { updateFormRef.current?.reset(); setIsStatusChanged(false) } } size={'lg'}><X />Cancel</Button>
+                <Button size={'lg'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
               </div>
             )}
           </div>
@@ -84,7 +84,7 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
                   <TableCell className="font-medium">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
                   <TableCell className={getTextColor(job.status)}>
                     <input type="hidden" name="ids" value={job.id} />
-                    <select onChange={() => setIsStatusChanged(true)} className="cursor-pointer" defaultValue={job.status} name={`status-${job.id}`}>
+                    <select onChange={() => setIsStatusChanged(true)} className="cursor-pointer p-1 rounded-md dark:bg-accent dark:text-white" defaultValue={job.status} name={`status-${job.id}`}>
                       <option value={job.status}>{job.status}</option>
                       {job.status === "APPLIED" ? (
                         <>

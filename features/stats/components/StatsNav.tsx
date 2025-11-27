@@ -4,9 +4,8 @@ const StatsNav = ({ range, onChange }: { range: any, onChange: (e: any) => void 
     <section className='flex w-full justify-between'>
         <h1 className='text-2xl font-medium'>Statistics</h1>
             <div className='flex gap-2 items-center'>
-                <span className='text-sm'>*Filter</span>
                 <select
-                    className="border-2 rounded-md px-3 py-2"
+                    className="border-2 bg-white dark:bg-accent rounded-md px-3 py-2"
                     value={range}
                     onChange={onChange}
                     >

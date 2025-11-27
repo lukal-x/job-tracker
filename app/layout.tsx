@@ -1,12 +1,12 @@
 "use client"
-import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
-import Navbar from "@/components/Navbar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ThemeProvider } from "@/components/theme-provider";
+import Navbar from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,12 +32,14 @@ export default function RootLayout({
       >
         <SessionProvider>
           <QueryClientProvider client={queryClient}>
-                {/* <Navbar /> */}
+            <ThemeProvider attribute="class" defaultTheme="dark">
+                <Navbar />
                 <SidebarProvider>
                   <AppSidebar />
                   <SidebarTrigger />
                   {children}
                 </SidebarProvider>
+            </ThemeProvider>
           </QueryClientProvider>
         </SessionProvider>
       </body>

@@ -13,7 +13,7 @@ export default function FiltersToolbar({ filterType, status,searchTerm, isDisabl
                 <Button disabled={isDisabled} type="button" variant={'outline'} onClick={showApplied} size={'lg'}><MailCheck /> Show Applied</Button>
                 <Button disabled={isDisabled}  type="button" variant={'outline'} onClick={showRejected} size={'lg'}><X /> Show Rejected</Button>
                 <Button disabled={isDisabled}  type="button" variant={'outline'} onClick={showInterview} size={'lg'} ><Mic /> Show Interview</Button>
-                {(status || searchTerm) && <Button disabled={isDisabled} type="button" size={'sm'} onClick={reset}>Reset Filters</Button>}
+                {(status || searchTerm) && <Button disabled={isDisabled} type="button" size={'lg'} onClick={reset}>Reset Filters</Button>}
             </div>
           )}
         </div>

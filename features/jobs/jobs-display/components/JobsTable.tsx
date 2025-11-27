@@ -10,39 +10,24 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { getTextColor } from "@/helpers"
-import { bulkUpdateJobStatuses } from "@/features/batch-actions/server-actions/formActions"
 import { useEffect, useRef, useState } from "react"
-import JobFilters from "@/features/filters/components/FiltersToolbars"
+import JobFilters from "@/features/jobs/job-filters/components/FiltersToolbars"
 import { Job } from "../types"
 import { Button } from "@/components/ui/button"
-import { Building2, Mic, Save, Trash, X } from "lucide-react"
-import { useFilters } from "@/features/filters/hooks/useFilters"
-import { deleteRecords, updateRecordsStatus } from "@/features/batch-actions/services/batch-actions-service"
-import { FileImportForm } from "@/features/jobs-import/components/ImportForm"
-import ExportToPdf from "@/features/jobs-export/components/ExportToPdf"
+import { Building2, Save, X } from "lucide-react"
+import { useFilters } from "@/features/jobs/job-filters/hooks/useFilters"
+import ExportToPdf from "@/features/pdf-export/components/ExportToPdf"
+import UpdateJobStatusButtons from "./UpdateJobStatusButtons"
+import { useSelectRows } from "../hooks/useSelectRows"
+import { FileImportForm } from "../../jobs-import/components/ImportForm"
+import { bulkUpdateJobStatuses } from "../server-actions/bulkUpdateJobStatus"
 
 export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean }) {
   const { filteredData: jobsToDisplay, isStatusChanged, query, status, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");
+  const { checkAllRows, checkSingleRow, selectedRows } = useSelectRows();
   const updateFormRef = useRef<HTMLFormElement | null>(null);
   const tableRef = useRef<any>(null);
-  const [selectedRows, setSelectedRows] = useState<string[]>([]);
   const [isTableReady, setIsTableReady] = useState(false);
-
-  const checkAllRows = (e: any, jobs: Job[]) => {
-    if (e.target.checked) {
-      setSelectedRows(jobs.map((j) => j.id));
-    } else {
-      setSelectedRows([]);
-    }
-  }
-
-  const checkSingleRow = (e: any, id: string) => {
-    if (e.target.checked) {
-      setSelectedRows((prev) => [...prev, id]);
-    } else {
-      setSelectedRows((prev) => prev.filter((rowId) => rowId !== id));
-    }
-  };
 
   useEffect(() => {
     if (tableRef.current) {
@@ -61,28 +46,25 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
   return (
         <>
           <div className="flex w-full justify-between">
-            {isTableReady && <ExportToPdf isDisabled={selectedRows.length > 0} tableRef={tableRef.current} />}
+            {isTableReady && 
+              <ExportToPdf isDisabled={selectedRows.length > 0} elementRef={tableRef.current} />
+            }
             <FileImportForm isDisabled={selectedRows.length > 0} />
           </div>
-          <form ref={updateFormRef} className="w-full" action={bulkUpdateJobStatuses}>
+
+          <form ref={updateFormRef} action={bulkUpdateJobStatuses} className="w-full">
           <div className="md:flex items-center grid w-full justify-between">
             <JobFilters filterType="JOBS" status={status} searchTerm={query} isDisabled={isStatusChanged} handleSearch={(e) => setQuery(e.target.value)} reset={() => { setStatus(""); setQuery("") } } showApplied={() => setStatus("APPLIED")} showInterview={() => setStatus("INTERVIEW")} showRejected={() => setStatus("REJECTED")} />
             {isStatusChanged && (
-              <div className="flex gap-2">
-                <Button type="button" onClick={() => { updateFormRef.current?.reset(); setIsStatusChanged(false) } } size={'sm'}><X />Cancel</Button>
-                <Button size={'sm'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
+              <div className="flex gap-2 ml-2">
+                <Button type="button" onClick={() => { updateFormRef.current?.reset(); setIsStatusChanged(false) } } size={'lg'}><X />Cancel</Button>
+                <Button size={'lg'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
               </div>
             )}
           </div>
+
           {selectedRows.length > 0 && (
-            <div className="w-full mt-3 flex items-center justify-between">
-              <span className="font-medium">Selected Records ({selectedRows.length})</span>
-              <div className="flex gap-2 items-center">
-                <Button type="button" onClick={async () => await updateRecordsStatus(selectedRows, "INTERVIEW")} variant={'outline'}><Mic />Mark As Interview</Button>
-                <Button type="button" variant={'outline'} size={'sm'}><X />Mark As Rejected</Button>
-                <Button type="button" onClick={async () => {await deleteRecords(selectedRows); location.reload();}} variant={'destructive'} size={'sm'}><Trash />Delete {selectedRows.length} records</Button>
-              </div>
-            </div>
+            <UpdateJobStatusButtons selectedRows={selectedRows} />
           )}
           <Table ref={tableRef} className="mt-5 border">
             <TableCaption>A list of your recent job applications.</TableCaption>
@@ -99,10 +81,10 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
                 <TableRow key={job.id}>
                   <TableCell><input data-html2canvas-ignore value={job.id} checked={selectedRows.includes(job.id)} onChange={(e) => checkSingleRow(e, job.id)} type="checkbox" /></TableCell>
                   <TableCell className="font-medium">{job.title}</TableCell>
-                  <TableCell className="text-gray-600">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
+                  <TableCell className="font-medium">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
                   <TableCell className={getTextColor(job.status)}>
                     <input type="hidden" name="ids" value={job.id} />
-                    <select onChange={() => setIsStatusChanged(true)} className="cursor-pointer" defaultValue={job.status} name={`status-${job.id}`}>
+                    <select onChange={() => setIsStatusChanged(true)} className="cursor-pointer p-1 rounded-md dark:bg-accent dark:text-white" defaultValue={job.status} name={`status-${job.id}`}>
                       <option value={job.status}>{job.status}</option>
                       {job.status === "APPLIED" ? (
                         <>

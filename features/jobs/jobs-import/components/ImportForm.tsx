@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Button } from "../../../components/ui/button";
 import { Upload } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 
 const initialFormState = {
   isSubmitting: false,

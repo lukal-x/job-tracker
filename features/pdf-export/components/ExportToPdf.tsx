@@ -5,7 +5,7 @@ import { sanitizeLabColors } from "@/helpers";
 import { useState } from "react";
 import Loader from "@/components/Loader";
 
-const ExportToPdf = ({ tableRef, isDisabled }: { tableRef: any; isDisabled: boolean }) => {
+const ExportToPdf = ({ elementRef, isDisabled }: { elementRef: any; isDisabled: boolean }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleDownloadPdf = async () => {
@@ -20,7 +20,7 @@ const ExportToPdf = ({ tableRef, isDisabled }: { tableRef: any; isDisabled: bool
 
       await html2pdf()
         .set({ filename: "Applied_Job_List.pdf" })
-        .from(tableRef)
+        .from(elementRef)
         .save();
     } catch (err) {
       console.error("PDF export failed", err);

@@ -1,0 +1,29 @@
+{
+  "name": "job-tracker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo run dev --parallel",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+   "workspaces": [
+    "apps/*"
+  ],
+  "packageManager": "npm@10.2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nemanja0033/job-tracker.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nemanja0033/job-tracker/issues"
+  },
+  "homepage": "https://github.com/Nemanja0033/job-tracker#readme",
+  "description": "",
+  "devDependencies": {
+    "turbo": "^2.6.1"
+  }
+}

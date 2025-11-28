@@ -7,7 +7,7 @@ import { useFirebaseUser } from "@/hooks/useFirebaseUser";
 
 export default function Home() {
   const { user, token } = useFirebaseUser();
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isPending } = useQuery({
     queryKey: ['jobs', user?.email],
     queryFn: () => fetchJobs(token),
     staleTime: 60 * 5000,
@@ -16,6 +16,14 @@ export default function Home() {
 
   if(isLoading){
     return <Loader type="NORMAL" />
+  }
+
+  if(!user){
+    return(
+      <div className="w-full h-[60vh] flex justify-center items-center">
+          <span className="text-gray-400 text-2xl font-semibold">Sign In To Start importing jobs</span>
+      </div>
+    )
   }
 
   return (

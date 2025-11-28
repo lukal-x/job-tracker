@@ -35,14 +35,6 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
     }
   }, []);
 
-  if(!isLoading && jobs.length < 1){
-    return(
-      <div className="w-full h-full flex justify-center">
-          <span className="text-gray-400">Start importing jobs.</span>
-      </div>
-    )
-  }
-
   return (
         <>
           <div className="flex w-full justify-between">

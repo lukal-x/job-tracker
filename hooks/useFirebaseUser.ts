@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth, onIdTokenChanged, User } from "firebase/auth";
 
 export function useFirebaseUser() {
   const [user, setUser] = useState<User | null>(null);
@@ -8,7 +8,7 @@ export function useFirebaseUser() {
   useEffect(() => {
     const auth = getAuth();
 
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onIdTokenChanged(auth, async (currentUser) => {
       if (currentUser) {
         setUser(currentUser);
         const idToken = await currentUser.getIdToken();

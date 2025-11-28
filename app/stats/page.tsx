@@ -6,6 +6,7 @@ import Loader from '@/components/Loader'
 import JobChart from '@/features/stats/components/JobChart'
 import JobStatsGrid from '@/features/stats/components/JobStatsGrid'
 import StatsNav from '@/features/stats/components/StatsNav'
+import { useFirebaseUser } from '@/hooks/useFirebaseUser'
 
 const ranges = {
     "7d": 7,
@@ -14,15 +15,16 @@ const ranges = {
   } as const;
 
 export default function StatsPage(){
+    const { token } = useFirebaseUser();
     const [range, setRange] = useState<keyof typeof ranges>("7d")
     const endDate = formatISO(new Date(), { representation: "date" })
     const startDate = formatISO(subDays(new Date(), ranges[range]), { representation: "date" })
-    const { data, isLoading } = useStats(startDate, endDate);
+    const { data, isLoading } = useStats(token, startDate, endDate);
 
-    if(isLoading){
+    if(isLoading || !token){
         return <Loader type='NORMAL' />
     }
-   
+
     return(
         <main className="w-full h-full flex justify-center items-center">
             <section className="w-5xl p-3 grid place-items-center gap-5">

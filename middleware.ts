@@ -4,6 +4,7 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // **TODO** implement redirecting to landing if user is not auth
   if (pathname === '/') {
     const authHeader = request.headers.get('authorization');
 

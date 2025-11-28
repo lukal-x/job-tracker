@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Upload } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { useFirebaseUser } from "@/hooks/useFirebaseUser";
 
 const initialFormState = {
   isSubmitting: false,
@@ -14,6 +15,7 @@ const initialFormState = {
 export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
   const [formState, setFormState] = useState(initialFormState);
   const queryClient = useQueryClient();
+  const { token } = useFirebaseUser();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -36,10 +38,14 @@ export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
     const formData = new FormData();
     formData.append("text", file);
 
+    // get current user and token
     try {
       const res = await fetch("/api/jobs", {
         method: "POST",
         body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
 
       if (!res.ok) {

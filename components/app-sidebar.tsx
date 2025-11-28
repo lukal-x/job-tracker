@@ -15,7 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import SignInButton from "./AuthToggler"
+import SignInButton from "../features/auth/components/AuthToggler"
 import { ModeToggle } from "./theme-toggler"
 
 const items = [

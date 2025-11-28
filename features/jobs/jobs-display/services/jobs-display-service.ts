@@ -1,6 +1,10 @@
-export async function fetchJobs(){
+export async function fetchJobs(token: string | null){
     try{
-        const res = await fetch('/api/jobs');
+        const res = await fetch('/api/jobs', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         const data = await res.json();
         return data
     }

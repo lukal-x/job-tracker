@@ -1,8 +1,34 @@
 import { db } from "@/lib/db";
+import { admin } from "@/lib/firebaseAdmin";
 import { format } from "date-fns";
 import { NextResponse } from "next/server";
 
+
+// **TODO** Error is beacuse of when we have no jobs application in time range we still iterate or mutate empty data causing erros
 export async function GET(req: Request){
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+        return NextResponse.json({ error: "Missing Authorization header" }, { status: 401 });
+    }
+
+    const token = authHeader.split(" ")[1];
+    if (!token) {
+        return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    }
+
+    const decoded = await admin.auth().verifyIdToken(token);
+    const userData = await admin.auth().getUser(decoded.uid)
+        
+    console.log("@USER FIREBASE ID", userData.uid)
+    const user = await db.user.findUnique({
+        where: { firebaseUid: userData.uid }
+    });
+
+    console.log("@USER ID ", user?.id)
+
+    if(!user){
+        return NextResponse.json({ error: "User dont exist!"}, { status: 404 });
+    }
     const { searchParams } = new URL(req.url);
     const start = searchParams.get("start");
     const end = searchParams.get("end");
@@ -11,9 +37,12 @@ export async function GET(req: Request){
         return NextResponse.json({ error: "Missing date range" }, { status: 400 });
     }
 
+    console.log("@BEFORE DB QUERY")
+
     try{
         const jobs = await db.job.findMany({
             where: {
+                userId: user.id,
                 appliedAt: {
                     gte: new Date(start),
                     lte: new Date(end)
@@ -24,6 +53,9 @@ export async function GET(req: Request){
             }
         });
 
+        console.log("@AFTER QUERY JOBS", jobs)
+
+
         const allAppliedDates = [jobs[0].appliedAt];
 
         // iterate through jobs and take one date for one day
@@ -32,6 +64,8 @@ export async function GET(req: Request){
                 allAppliedDates.push(jobs[i].appliedAt);
             }
         }
+
+        console.log("@AFTER LOOP")
 
         // Data that will be send to client 
         //  1. Total Applies amount
@@ -59,9 +93,10 @@ export async function GET(req: Request){
             const jobsAppliedOnSameDate = jobs.filter((job) => job.appliedAt.toISOString().split('T')[0] === totalApplyingDays[i].toISOString().split('T')[0])
             appliesPerDay[format(totalApplyingDays[i], 'yyyy-MM-dd')] = jobsAppliedOnSameDate.length;
         }
-        
 
-        return NextResponse.json({ totalApplies, totalInterviews, totalRejected, appliesPerDay, averageAppliesPerDay, activeDays, interviewsPercentage }, { status: 200 });
+        console.log("@AFTER LOOP #2")
+        
+        return NextResponse.json({ totalApplies, totalInterviews, totalRejected, averageAppliesPerDay, appliesPerDay, activeDays, interviewsPercentage }, { status: 200 });
     }
     catch(err){
         return NextResponse.json({ error: err }, { status: 500 });

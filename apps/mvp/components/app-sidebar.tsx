@@ -1,7 +1,8 @@
 import {
   ScrollText,
   Inbox,
-  ChartBar
+  ChartBar,
+  BotIcon
 } from "lucide-react"
 
 import {
@@ -25,9 +26,9 @@ const items = [
     icon: ScrollText,
   },
   {
-    title: "Mails",
-    url: "/mails",
-    icon: Inbox,
+    title: "JobTrack AI",
+    url: "/chatbot",
+    icon: BotIcon,
   },
   {
     title: "Statistics",
@@ -42,8 +43,8 @@ export function AppSidebar() {
       <SidebarContent className="flex flex-col justify-between h-full px-2 py-4">
         <div>
           <SidebarGroup>
-            <SidebarGroupLabel className="text-xl font-semibold px-3 mb-2 border-b">
-              Job Tracker
+            <SidebarGroupLabel className="text-xl font-bold px-3 mb-2 border-b rounded-none">
+              JobTrackr
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -54,7 +55,7 @@ export function AppSidebar() {
                         href={item.url}
                         className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors"
                       >
-                        <item.icon size={30} className="text-muted-foreground" />
+                        <item.icon size={32} className="text-muted-foreground" />
                         <span className="text-md font-medium">{item.title}</span>
                       </a>
                     </SidebarMenuButton>

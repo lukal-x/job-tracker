@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { getTextColor } from "@/helpers"
 import { useEffect, useRef, useState } from "react"
 import JobFilters from "@/features/jobs/job-filters/components/FiltersToolbars"
 import { Job } from "../types"
@@ -48,7 +47,7 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
           <div className="md:flex items-center grid w-full justify-between">
             <JobFilters filterType="JOBS" status={status} searchTerm={query} isDisabled={isStatusChanged} handleSearch={(e) => setQuery(e.target.value)} reset={() => { setStatus(""); setQuery("") } } showApplied={() => setStatus("APPLIED")} showInterview={() => setStatus("INTERVIEW")} showRejected={() => setStatus("REJECTED")} />
             {isStatusChanged && (
-              <div className="flex gap-2 ml-2">
+              <div className="flex gap-2 md:ml-2 mt-2">
                 <Button type="button" onClick={() => { updateFormRef.current?.reset(); setIsStatusChanged(false) } } size={'lg'}><X />Cancel</Button>
                 <Button size={'lg'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
               </div>
@@ -70,14 +69,14 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
             </TableHeader>
             <TableBody>
               {jobsToDisplay.map((job: Job) => (
-                <TableRow key={job.id}>
+                <TableRow className={`${selectedRows.includes(job.id) ? 'bg-accent' : ''}`} key={job.id}>
                   <TableCell><input data-html2canvas-ignore value={job.id} checked={selectedRows.includes(job.id)} onChange={(e) => checkSingleRow(e, job.id)} type="checkbox" /></TableCell>
                   <TableCell className="font-medium">{job.title}</TableCell>
                   <TableCell className="font-medium">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
-                  <TableCell className={getTextColor(job.status)}>
+                  <TableCell className="dark:text-black">
                     <input type="hidden" name="ids" value={job.id} />
-                    <select onChange={() => setIsStatusChanged(true)} className="cursor-pointer p-1 rounded-md dark:bg-accent dark:text-white" defaultValue={job.status} name={`status-${job.id}`}>
-                      <option value={job.status}>{job.status}</option>
+                    <select onChange={() => setIsStatusChanged(true)} className={`cursor-pointer w-28 p-1 rounded-md dark:bg-white bg-accent`} defaultValue={job.status} name={`status-${job.id}`}>
+                      <option value={job.status}>• {job.status}</option>
                       {job.status === "APPLIED" ? (
                         <>
                           <option value="REJECTED">REJECTED</option>

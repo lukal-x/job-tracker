@@ -16,6 +16,23 @@ export function getTextColor(status: string){
     return textColor;
 }
 
+export function getBadgeLightColor(status: string){
+  let badgeColor = '';
+
+  switch(status){
+    case "APPLIED":
+      badgeColor="bg-blue-300 text-blue-600";
+      break;
+    case "REJECTED":
+      badgeColor="bg-red-300 text-red-600";
+      break;
+    case "INTERVIEW":
+      badgeColor = "bg-green-300 text-green-600"
+  }
+
+  return badgeColor;
+}
+
 export function sanitizeLabColors(root: HTMLElement = document.body) {
     const fallbackBackground = '#f4f4f5'; 
     const fallbackText = '#1f2937';      

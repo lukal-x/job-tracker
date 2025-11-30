@@ -28,7 +28,7 @@ export default function Home() {
 
   return (
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
-      <div className="w-5xl p-3 grid place-items-center gap-5">
+      <div className="md:w-5xl w-xs md:p-3 grid place-items-center gap-5">
         <JobsTable isLoading={isLoading} jobs={data?.jobs ?? []} />
       </div>
     </main>

@@ -4,7 +4,7 @@ import { StatsData } from '../types'
 
 const JobStatsGrid = ({ data }: { data: StatsData | undefined }) => {
   return (
-    <section className='grid w-full grid-cols-2 gap-3'>
+    <section className='grid w-full md:grid-cols-2 gap-3'>
         <Card className='gird place-items-center'>
                 <CardTitle className='flex items-center gap-2'><FileText strokeWidth={1} />Total Applies</CardTitle>
             <CardContent>

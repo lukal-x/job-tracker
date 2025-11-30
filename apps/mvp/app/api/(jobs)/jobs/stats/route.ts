@@ -3,8 +3,6 @@ import { admin } from "@/lib/firebaseAdmin";
 import { format } from "date-fns";
 import { NextResponse } from "next/server";
 
-
-// **TODO** Error is beacuse of when we have no jobs application in time range we still iterate or mutate empty data causing erros
 export async function GET(req: Request){
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
@@ -19,12 +17,9 @@ export async function GET(req: Request){
     const decoded = await admin.auth().verifyIdToken(token);
     const userData = await admin.auth().getUser(decoded.uid)
         
-    console.log("@USER FIREBASE ID", userData.uid)
     const user = await db.user.findUnique({
         where: { firebaseUid: userData.uid }
     });
-
-    console.log("@USER ID ", user?.id)
 
     if(!user){
         return NextResponse.json({ error: "User dont exist!"}, { status: 404 });
@@ -36,8 +31,6 @@ export async function GET(req: Request){
     if(!start || !end){
         return NextResponse.json({ error: "Missing date range" }, { status: 400 });
     }
-
-    console.log("@BEFORE DB QUERY")
 
     try{
         const jobs = await db.job.findMany({
@@ -53,8 +46,20 @@ export async function GET(req: Request){
             }
         });
 
-        console.log("@AFTER QUERY JOBS", jobs)
-
+        if (jobs.length === 0) {
+            return NextResponse.json(
+              {
+                totalApplies: 0,
+                totalInterviews: [],
+                totalRejected: [],
+                averageAppliesPerDay: 0,
+                appliesPerDay: {},
+                activeDays: [],
+                interviewsPercentage: 0,
+              },
+              { status: 200 }
+            );
+        }
 
         const allAppliedDates = [jobs[0].appliedAt];
 
@@ -64,8 +69,6 @@ export async function GET(req: Request){
                 allAppliedDates.push(jobs[i].appliedAt);
             }
         }
-
-        console.log("@AFTER LOOP")
 
         // Data that will be send to client 
         //  1. Total Applies amount
@@ -94,8 +97,6 @@ export async function GET(req: Request){
             appliesPerDay[format(totalApplyingDays[i], 'yyyy-MM-dd')] = jobsAppliedOnSameDate.length;
         }
 
-        console.log("@AFTER LOOP #2")
-        
         return NextResponse.json({ totalApplies, totalInterviews, totalRejected, averageAppliesPerDay, appliesPerDay, activeDays, interviewsPercentage }, { status: 200 });
     }
     catch(err){

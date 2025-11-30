@@ -27,7 +27,7 @@ export default function StatsPage(){
 
     return(
         <main className="w-full h-full flex justify-center items-center">
-            <section className="w-5xl p-3 grid place-items-center gap-5">
+            <section className="md:w-5xl w-xs p-3 grid place-items-center gap-5">
                 <StatsNav onChange={(e) => setRange(e.target.value as keyof typeof ranges)} range={range} />
                 <JobChart data={data} />
                <JobStatsGrid data={data} />

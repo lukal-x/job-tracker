@@ -44,7 +44,7 @@ export function AppSidebar() {
         <div>
           <SidebarGroup>
             <SidebarGroupLabel className="flex gap-2 items-center text-2xl font-bold px-3 pb-2 mb-2 border-b rounded-none">
-              <ChartBarIncreasingIcon /> JobTrackr
+              <ChartBarIncreasingIcon /> JobTrakify
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>

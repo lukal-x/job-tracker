@@ -17,7 +17,7 @@ export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
   const [formState, setFormState] = useState(initialFormState);
   const queryClient = useQueryClient();
   const { token } = useFirebaseUser();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubmitButtonHidden, setIsSubmitButtonHidden] = useState(true);
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -61,6 +61,7 @@ export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
 
       setFormState((perv) => ({...perv, isSubmitting: false}));
       queryClient.invalidateQueries({ queryKey: ['jobs']});
+      setIsSubmitButtonHidden(true);
     } catch (err: any) {
       setFormState({
         isSubmitting: false,
@@ -82,8 +83,8 @@ export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
               {formState.errorMessage}
             </span>
           )}
-          <button type="button" onClick={() => setIsModalOpen(true)} className="dark:text-gray-400 text-xs flex gap-1 hover:underline cursor-pointer items-center"><Info size={14} /> Click here to see guide</button>
           <input
+            onChange={() => setIsSubmitButtonHidden(false)}
             disabled={isDisabled}
             type="file"
             id="text"
@@ -96,12 +97,13 @@ export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
               <span><Upload /> Import</span>
             </Button>
           </label>
-          <Button type="submit" disabled={formState.isSubmitting || isDisabled}>
-            {formState.isSubmitting ? "Uploading..." : "Submit"}
-          </Button>
+          {!isSubmitButtonHidden && (
+            <Button type="submit" disabled={formState.isSubmitting || isDisabled}>
+              {formState.isSubmitting ? "Uploading..." : "Submit"}
+            </Button>
+          )}
         </div>
       </form>
-      <ImportGuideModal isOpen={isModalOpen} onOpenChange={setIsModalOpen} />
     </>
   );
 }

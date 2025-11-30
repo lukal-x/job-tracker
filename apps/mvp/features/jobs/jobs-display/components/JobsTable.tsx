@@ -20,6 +20,8 @@ import UpdateJobStatusButtons from "./UpdateJobStatusButtons"
 import { useSelectRows } from "../hooks/useSelectRows"
 import { FileImportForm } from "../../jobs-import/components/ImportForm"
 import { bulkUpdateJobStatuses } from "../server-actions/bulkUpdateJobStatus"
+import ManuelJobImport from "../../jobs-import/components/ManuelJobImport"
+import ImportGuideModal from "../../jobs-import/components/ImportGuideModal"
 
 export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean }) {
   const { filteredData: jobsToDisplay, isStatusChanged, query, status, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");
@@ -40,7 +42,11 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
             {isTableReady && 
               <ExportToPdf isDisabled={selectedRows.length > 0} elementRef={tableRef.current} />
             }
-            <FileImportForm isDisabled={selectedRows.length > 0} />
+            <div className="flex gap-2 items-center">
+              <ImportGuideModal />
+              <FileImportForm isDisabled={selectedRows.length > 0} />
+              <ManuelJobImport isDisabled={selectedRows.length > 0} />
+            </div>
           </div>
 
           <form ref={updateFormRef} action={bulkUpdateJobStatuses} className="w-full">

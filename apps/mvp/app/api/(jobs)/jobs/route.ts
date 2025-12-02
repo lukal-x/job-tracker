@@ -60,6 +60,14 @@ export async function POST(req: Request) {
       if (!file) {
         return NextResponse.json({ error: "No file received" }, { status: 400 });
       }
+
+      const user = await db.user.findUnique({
+        where: { firebaseUid: userData.uid }
+      });
+
+      if(!user){
+        return NextResponse.json({ error: "No user found" }, { status: 404 });
+      }
   
       const text = await file.text();
       const jobs = text
@@ -69,13 +77,13 @@ export async function POST(req: Request) {
   
       await Promise.all(
         jobs.map((title) =>
-          db.job.create({ data: { title, status: "APPLIED", userId: userData.uid  } })
+          db.job.create({ data: { title, status: "APPLIED", userId: user.id  } })
         )
       );
   
       return NextResponse.redirect(new URL("/", req.url));
     } catch (err) {
       console.error("Upload error:", err);
-      return NextResponse.json({ error: "Uploaded file contains duplicates!" }, { status: 500 });
+      return NextResponse.json({ error: err }, { status: 500 });
     }
   }

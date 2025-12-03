@@ -1,10 +1,9 @@
 "use client"
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useFirebaseUser } from "@/hooks/useFirebaseUser";
 import axios from "axios";
-import { BotIcon } from "lucide-react";
+import { Sparkle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Role = "user" | "ai";
@@ -14,7 +13,7 @@ interface Message {
 }
 
 const aiWelcomeMessage =
-  "👋 Hello I'm JobTrackr AI! I can help you with your job application process. Whatever you need, from job description analyzing, finding good job posts, and more!";
+  "Hello I'm TrakifyAI! I can help you with your job application process. Do you want me to check you recent job applications or anything else?";
 
 export default function ChatbotPage() {
   const { user, token } = useFirebaseUser();
@@ -73,12 +72,12 @@ export default function ChatbotPage() {
 
   return (
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
-      <div className="w-5xl p-3 grid place-items-center gap-5">
+      <div className="w-5xl p-3 grid place-items-center gap-2">
         <div className="w-full grid place-items-start">
-          <h1 className="text-2xl font-bold">Ask JobTrackr AI</h1>
+          <h1 className="text-2xl font-bold">Ask TrakifyAI</h1>
         </div>
 
-        <div className="w-full p-5 bg-accent/40 overflow-auto rounded-md border h-[80vh]">
+        <div className="w-full p-5 bg-accent/40 overflow-auto rounded-xl border h-[80vh]">
           <div className="flex flex-col gap-6">
             {messages.map((m, i) => (
               <div
@@ -87,7 +86,7 @@ export default function ChatbotPage() {
               >
                 <div
                   className={
-                    "rounded-md p-3 max-w-[70%] flex items-start gap-2 " +
+                    "rounded-xl p-5 max-w-[70%] flex items-start gap-2 " +
                     (m.role === "ai"
                       ? "dark:bg-gray-800/40 bg-gray-200"
                       : "dark:bg-blue-900/40 bg-blue-200")
@@ -99,7 +98,7 @@ export default function ChatbotPage() {
                       className="rounded-full w-8 h-8"
                       alt="user avatar"
                     />
-                  ) : <BotIcon strokeWidth={1} size={28} />}
+                  ) : <Sparkle />}
                   <span>{m.content}</span>
                 </div>
               </div>
@@ -120,7 +119,7 @@ export default function ChatbotPage() {
             disabled={!token}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="max-h-20 max-w-[1000px] pr-32"
+            className="max-h-20 rounded-xl bg-accent/40 max-w-[1000px] pr-32"
             placeholder="Type your message..."
           />
           <Button className="absolute right-3 top-3" onClick={() => sendPrompt(prompt)} size="lg" disabled={isLoading || !token}>

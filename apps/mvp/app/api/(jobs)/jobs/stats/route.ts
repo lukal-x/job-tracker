@@ -1,6 +1,6 @@
 import { db } from "@/lib/db";
 import { admin } from "@/lib/firebaseAdmin";
-import { format } from "date-fns";
+import { endOfDay, format, startOfDay } from "date-fns";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request){
@@ -37,8 +37,8 @@ export async function GET(req: Request){
             where: {
                 userId: user.id,
                 appliedAt: {
-                    gte: new Date(start),
-                    lte: new Date(end)
+                    gte: startOfDay(start),
+                    lte: endOfDay(end)
                 }
             },
             orderBy: {

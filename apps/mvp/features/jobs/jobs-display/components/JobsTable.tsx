@@ -23,7 +23,7 @@ import { bulkUpdateJobStatuses } from "../server-actions/bulkUpdateJobStatus"
 import ManuelJobImport from "../../jobs-import/components/ManuelJobImport"
 import ImportGuideModal from "../../jobs-import/components/ImportGuideModal"
 
-export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean }) {
+export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
   const { filteredData: jobsToDisplay, isStatusChanged, query, status, setQuery, setStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");
   const { checkAllRows, checkSingleRow, selectedRows } = useSelectRows();
   const updateFormRef = useRef<HTMLFormElement | null>(null);
@@ -81,7 +81,7 @@ export function JobsTable({ jobs, isLoading }: { jobs: Job[], isLoading: boolean
                   <TableCell className="font-medium">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
                   <TableCell className="dark:text-black">
                     <input type="hidden" name="ids" value={job.id} />
-                    <select onChange={() => setIsStatusChanged(true)} className={`cursor-pointer w-28 p-1 rounded-md dark:bg-white bg-accent`} defaultValue={job.status} name={`status-${job.id}`}>
+                    <select onChange={() => setIsStatusChanged(true)} className={`cursor-pointer w-28 p-1 rounded-md dark:text-gray-300 bg-accent`} defaultValue={job.status} name={`status-${job.id}`}>
                       <option value={job.status}>• {job.status}</option>
                       {job.status === "APPLIED" ? (
                         <>

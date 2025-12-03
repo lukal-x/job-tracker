@@ -6,7 +6,7 @@ import { fetchJobs } from "@/features/jobs/jobs-display/services/jobs-display-se
 import { useFirebaseUser } from "@/hooks/useFirebaseUser";
 
 export default function Home() {
-  const { user, token } = useFirebaseUser();
+  const { user, token, loading: isUserLoading } = useFirebaseUser();
   const { data, isLoading, isPending } = useQuery({
     queryKey: ['jobs', user?.email],
     queryFn: () => fetchJobs(token),
@@ -14,11 +14,11 @@ export default function Home() {
     enabled: !!token
   })
 
-  if(isLoading){
+  if(isLoading || isUserLoading){
     return <Loader type="NORMAL" />
   }
 
-  if(!user){
+  if(!token){
     return(
       <div className="w-full h-[60vh] flex justify-center items-center">
           <span className="text-gray-400 text-2xl font-semibold">Sign In To Start importing jobs</span>

@@ -4,6 +4,7 @@ import { getAuth, onIdTokenChanged, User } from "firebase/auth";
 export function useFirebaseUser() {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const auth = getAuth();
@@ -17,10 +18,11 @@ export function useFirebaseUser() {
         setUser(null);
         setToken(null);
       }
+      setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
 
-  return { user, token };
+  return { user, token, loading };
 }

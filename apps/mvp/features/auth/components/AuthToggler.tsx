@@ -16,7 +16,7 @@ export default function AuthToggler() {
   return (
     <div>
       <Popover>
-        <PopoverTrigger className="flex cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-accent/50 items-center gap-2">
+        <PopoverTrigger className={`${!token ? 'animate-pulse' : ''} flex cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-accent/50 items-center gap-2`}>
           <img className="w-10 h-10 rounded-lg" src={!user ? AVATAR_PLACEHOLDER : user.photoURL as string} alt="" />
           <div className="grid place-items-start">
            {user ? (

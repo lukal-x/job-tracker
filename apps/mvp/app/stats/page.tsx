@@ -15,14 +15,22 @@ const ranges = {
   } as const;
 
 export default function StatsPage(){
-    const { token } = useFirebaseUser();
+    const { token, loading: isUserLoading } = useFirebaseUser();
     const [range, setRange] = useState<keyof typeof ranges>("7d")
     const endDate = formatISO(new Date(), { representation: "date" })
     const startDate = formatISO(subDays(new Date(), ranges[range]), { representation: "date" })
     const { data, isLoading } = useStats(token, startDate, endDate);
 
-    if(isLoading || !token){
+    if(isLoading || isUserLoading){
         return <Loader type='NORMAL' />
+    }
+
+    if(!token){
+        return (
+            <div className="w-full h-[60vh] flex justify-center items-center">
+                <span className="text-gray-400 text-2xl font-semibold">Sign in to see you recent application statistics.</span>
+            </div>
+        )
     }
 
     return(

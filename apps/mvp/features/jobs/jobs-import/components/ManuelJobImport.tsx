@@ -22,7 +22,7 @@ const ManuelJobImport = ({ isDisabled }: { isDisabled: boolean }) => {
   const { 
     register,
     handleSubmit,
-    formState: { errors, isSubmitted }
+    formState: { errors, isSubmitting }
    } = useForm<JobImportForm>({ mode: "onSubmit" });
 
   const handleSubmitJob = async (data: JobImportForm) => {
@@ -74,7 +74,7 @@ const ManuelJobImport = ({ isDisabled }: { isDisabled: boolean }) => {
                 captionLayout="dropdown"
                 />
                 <div className="flex gap-2 w-full justify-end">
-                  <Button type="submit">Submit</Button>
+                  <Button disabled={isSubmitting} type="submit">{isSubmitting ? "Submitting. . ." : "Submit"}</Button>
                   <AlertDialogCancel className='cursor-pointer'>Cancel</AlertDialogCancel>
                 </div>
             </form>

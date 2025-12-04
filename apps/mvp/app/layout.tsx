@@ -1,5 +1,5 @@
 "use client"
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -8,16 +8,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '600', '700'], 
+  display: 'swap',
+})
 
 export default function RootLayout({
   children,
@@ -26,9 +21,9 @@ export default function RootLayout({
 }>) {
   const queryClient = new QueryClient();
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`antialiased`}
       >
         <SessionProvider>
           <QueryClientProvider client={queryClient}>

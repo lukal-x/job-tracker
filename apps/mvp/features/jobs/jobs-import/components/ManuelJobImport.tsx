@@ -39,7 +39,7 @@ const ManuelJobImport = ({ isDisabled }: { isDisabled: boolean }) => {
 
   return (
     <>
-        <Button disabled={isDisabled} onClick={() => setIsModalOpen(true)}>+ Manuel import</Button>
+        <Button disabled={isDisabled} onClick={() => setIsModalOpen(true)}>+ Add Job</Button>
         <AlertDialog onOpenChange={setIsModalOpen} open={isModalOpen}>
         <AlertDialogContent>
             <AlertDialogHeader>

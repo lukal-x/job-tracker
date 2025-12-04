@@ -7,6 +7,7 @@ import JobChart from '@/features/stats/components/JobChart'
 import JobStatsGrid from '@/features/stats/components/JobStatsGrid'
 import StatsNav from '@/features/stats/components/StatsNav'
 import { useFirebaseUser } from '@/hooks/useFirebaseUser'
+import { useIsMobile } from '@/hooks/use-mobile'
 
 const ranges = {
     "7d": 7,
@@ -20,6 +21,7 @@ export default function StatsPage(){
     const endDate = formatISO(new Date(), { representation: "date" })
     const startDate = formatISO(subDays(new Date(), ranges[range]), { representation: "date" })
     const { data, isLoading } = useStats(token, startDate, endDate);
+    const isMobile = useIsMobile();
 
     if(isLoading || isUserLoading){
         return <Loader type='NORMAL' />
@@ -33,12 +35,20 @@ export default function StatsPage(){
         )
     }
 
+    if(isMobile){
+        return(
+          <div className="w-full h-screen flex justify-center items-center">
+            <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
+          </div>
+        )
+    }
+
     return(
         <main className="w-full h-full flex justify-center items-center">
-            <section className="md:w-5xl w-xs p-3 grid place-items-center gap-5">
+            <section className="md:w-6xl p-3 w-xs grid place-items-center gap-5">
                 <StatsNav onChange={(e) => setRange(e.target.value as keyof typeof ranges)} range={range} />
                 <JobChart data={data} />
-               <JobStatsGrid data={data} />
+                <JobStatsGrid data={data} />
             </section>
         </main>
     )

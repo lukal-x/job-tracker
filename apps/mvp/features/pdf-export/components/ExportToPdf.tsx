@@ -37,7 +37,7 @@ const ExportToPdf = ({ elementRef, isDisabled }: { elementRef: any; isDisabled: 
     <div>
       <Button disabled={isDisabled} onClick={handleDownloadPdf}>
         <Download />
-        Export To PDF
+        Export
       </Button>
     </div>
   );

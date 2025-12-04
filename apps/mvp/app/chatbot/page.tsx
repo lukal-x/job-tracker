@@ -1,6 +1,7 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useFirebaseUser } from "@/hooks/useFirebaseUser";
 import axios from "axios";
 import { Send, Sparkle } from "lucide-react";
@@ -20,6 +21,7 @@ export default function ChatbotPage() {
   const [messages, setMessages] = useState<Message[]>([{ role: "ai", content: aiWelcomeMessage },]);
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const stored = sessionStorage.getItem("chatMessages");
@@ -68,6 +70,14 @@ export default function ChatbotPage() {
         setIsLoading(false);
         setPrompt("");
     }
+  }
+    
+  if(isMobile){
+    return(
+      <div className="w-full h-screen flex justify-center items-center">
+        <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
+      </div>
+    )
   }
 
   return (

@@ -8,19 +8,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from "@/components/theme-provider";
 import Navbar from "@/components/Navbar";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '600', '700'], // dodaj težine koje koristiš
+  weight: ['400', '600', '700'], 
   display: 'swap',
 })
 
@@ -33,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body
-        className={`antialiased bg-accent`}
+        className={`antialiased`}
       >
         <SessionProvider>
           <QueryClientProvider client={queryClient}>

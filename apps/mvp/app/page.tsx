@@ -4,6 +4,7 @@ import Loader from "@/components/Loader";
 import { useQuery } from "@tanstack/react-query";
 import { fetchJobs } from "@/features/jobs/jobs-display/services/jobs-display-service";
 import { useFirebaseUser } from "@/hooks/useFirebaseUser";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export default function Home() {
   const { user, token, loading: isUserLoading } = useFirebaseUser();
@@ -12,7 +13,8 @@ export default function Home() {
     queryFn: () => fetchJobs(token),
     staleTime: 60 * 5000,
     enabled: !!token
-  })
+  });
+  const isMobile = useIsMobile();
 
   if(isLoading || isUserLoading){
     return <Loader type="NORMAL" />
@@ -22,6 +24,14 @@ export default function Home() {
     return(
       <div className="w-full h-[60vh] flex justify-center items-center">
           <span className="text-gray-400 text-2xl font-semibold">Sign In To Start importing jobs</span>
+      </div>
+    )
+  }
+
+  if(isMobile){
+    return(
+      <div className="w-full h-screen flex justify-center items-center">
+        <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
       </div>
     )
   }

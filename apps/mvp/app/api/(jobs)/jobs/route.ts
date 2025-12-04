@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import { admin } from "@/lib/firebaseAdmin";
 import { NextResponse } from "next/server";
 
+// This messy code is ok only in beta version, future scaling will require migrating whole backend to another technology.
 export async function GET(req: Request){
     try{
         const authHeader = req.headers.get("Authorization");
@@ -50,7 +51,7 @@ export async function POST(req: Request) {
       if (!token) {
         return NextResponse.json({ error: "Invalid token" }, { status: 401 });
       }
-      // get user data and uid
+      // ** Get user data and uid
       const decoded = await admin.auth().verifyIdToken(token);
       const userData = await admin.auth().getUser(decoded.uid)
 
@@ -61,6 +62,31 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "No file received" }, { status: 400 });
       }
 
+      // ** Check file size 
+      const MAX_SIZE = 1 * 1024 * 1024; // 1MB
+
+      if (file.size > MAX_SIZE) {
+        return NextResponse.json(
+          { error: "File too large. Maximum allowed size is 1MB." },
+          { status: 413 }
+        );
+      }
+
+      // ** Check file format
+      const allowedMime = ["text/plain"];
+      const allowedExtensions = [".txt"];
+
+      const fileName = file.name.toLowerCase();
+      const isValidMime = allowedMime.includes(file.type);
+      const isValidExt = allowedExtensions.some((ext) => fileName.endsWith(ext));
+
+      if (!isValidMime || !isValidExt) {
+        return NextResponse.json(
+          { error: "Invalid file format. Only .txt files are allowed." },
+          { status: 400 }
+        );
+      }
+
       const user = await db.user.findUnique({
         where: { firebaseUid: userData.uid }
       });
@@ -69,11 +95,17 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "No user found" }, { status: 404 });
       }
   
+      // ** Safe parse and store jobs data.
+      // ** Validate length manualy
       const text = await file.text();
       const jobs = text
         .split("-")
         .map((title) => title.trim())
-        .filter((title) => title.length > 0);
+        .filter((title) => title.length > 0 && title.length < 30);
+      
+      if(jobs.length > 50){
+        return NextResponse.json({ error: "Title limts is 50 per upload!" }, { status: 400 });
+      }
   
       await Promise.all(
         jobs.map((title) =>
@@ -81,9 +113,9 @@ export async function POST(req: Request) {
         )
       );
   
-      return NextResponse.redirect(new URL("/", req.url));
+      return NextResponse.json({ succes: true }, { status: 201 });
     } catch (err) {
       console.error("Upload error:", err);
       return NextResponse.json({ error: err }, { status: 500 });
     }
-  }
+}

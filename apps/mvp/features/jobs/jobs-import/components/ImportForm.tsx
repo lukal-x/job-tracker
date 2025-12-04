@@ -4,7 +4,6 @@ import { Info, Upload } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useFirebaseUser } from "@/hooks/useFirebaseUser";
-import ImportGuideModal from "./ImportGuideModal";
 
 const initialFormState = {
   isSubmitting: false,
@@ -78,11 +77,6 @@ export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
         {/* <span className="flex gap-2 text-xs text-gray-400 items-center"><Info size={15} /> Supported files to import is .txt files, and must contain "-" between each job title.</span> */}
         
         <div className="items-center gap-2 flex">
-          {formState.isError && (
-            <span className="text-red-500 text-sm ml-2">
-              {formState.errorMessage}
-            </span>
-          )}
           <input
             onChange={() => setIsSubmitButtonHidden(false)}
             disabled={isDisabled}
@@ -103,6 +97,11 @@ export function FileImportForm({ isDisabled }: { isDisabled: boolean }) {
             </Button>
           )}
         </div>
+        {formState.isError && (
+          <span className="text-red-500 text-sm ml-2">
+            {formState.errorMessage}
+          </span>
+        )}
       </form>
     </>
   );

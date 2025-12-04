@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useFirebaseUser } from "@/hooks/useFirebaseUser";
 import axios from "axios";
-import { Sparkle } from "lucide-react";
+import { Send, Sparkle } from "lucide-react";
 import { useEffect, useState } from "react";
 
 type Role = "user" | "ai";
@@ -72,12 +72,13 @@ export default function ChatbotPage() {
 
   return (
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
-      <div className="w-5xl p-3 grid place-items-center gap-2">
-        <div className="w-full grid place-items-start">
-          <h1 className="text-2xl font-bold">Ask TrakifyAI</h1>
+      <div className="w-6xl p-3 grid place-items-center gap-2">
+        <div className="w-full grid place-items-start p-5 rounded-lg shadow-md bg-white dark:bg-sidebar">
+          <h1 className="text-2xl font-bold">AI Assistant</h1>
+          <p className="text-muted-foreground text-sm">Get AI-powered help with your job applications</p>
         </div>
 
-        <div className="w-full p-5 bg-accent/40 overflow-auto rounded-xl border h-[80vh]">
+        <div className="w-full p-5 bg-white dark:bg-sidebar overflow-auto rounded-xl border h-[80vh]">
           <div className="flex flex-col gap-6">
             {messages.map((m, i) => (
               <div
@@ -114,16 +115,16 @@ export default function ChatbotPage() {
           </div>
         </div>
 
-        <div className="w-full flex gap-3 relative">
+        <div className="w-full bg-white dark:bg-sidebar p-3 items-center rounded-lg flex gap-3 relative">
           <Textarea
             disabled={!token}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
-            className="max-h-20 rounded-xl bg-accent/40 max-w-[1000px] pr-32"
+            className="max-h-20 rounded-xl bg-accent/40 max-w-[1010px] pr-32"
             placeholder="Type your message..."
           />
-          <Button className="absolute right-3 top-3" onClick={() => sendPrompt(prompt)} size="lg" disabled={isLoading || !token}>
-            {"Submit"}
+          <Button className="absolute right-3 h-16 w-20 top-3" onClick={() => sendPrompt(prompt)} size="lg" disabled={isLoading || !token}>
+            <Send />
           </Button>
         </div>
       </div>

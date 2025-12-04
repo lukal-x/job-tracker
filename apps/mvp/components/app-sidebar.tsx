@@ -43,8 +43,8 @@ export function AppSidebar() {
       <SidebarContent className="flex flex-col justify-between h-full px-2 py-4">
         <div>
           <SidebarGroup>
-            <SidebarGroupLabel className="flex gap-2 items-center text-2xl font-bold px-3 pb-2 mb-2 border-b rounded-none">
-              <ChartBarIncreasingIcon /> JobTrakify
+            <SidebarGroupLabel className="flex gap-2 items-center text-xl p-10.5 font-bold px-3 mb-2 border-b rounded-none">
+              <span className="bg-primary rounded-lg text-white p-1 text-md">JT</span> JobTrakify
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -55,7 +55,7 @@ export function AppSidebar() {
                         href={item.url}
                         className="flex items-center text-lg gap-3 px-3 py-2 rounded-md transition-colors"
                       >
-                        <item.icon size={32} className="text-muted-foreground" />
+                        <item.icon size={40} className="text-muted-foreground" />
                         <span className="text-md font-medium">{item.title}</span>
                       </a>
                     </SidebarMenuButton>

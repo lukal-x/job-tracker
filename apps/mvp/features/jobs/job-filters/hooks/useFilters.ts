@@ -6,6 +6,10 @@ export function useFilters(data: any, type: "JOBS" | "EMAIL"){
     const [isStatusChanged, setIsStatusChanged] = useState(false);
     let filteredData: any = [];
 
+    function changeStatus(status: string){
+      setStatus(status);
+    }
+
     if(type === 'JOBS'){
       filteredData = data.filter((job: any) => {
         const matchesQuery = query
@@ -20,27 +24,12 @@ export function useFilters(data: any, type: "JOBS" | "EMAIL"){
       });
     }
 
-    if(type === 'EMAIL'){
-      filteredData = data.filter((email: any) => {
-        const matchesQuery = query
-            ? email.subject.toLowerCase().includes(query.toLowerCase()) || email.from.toLowerCase().includes(query.toLowerCase())
-            : true;
-        
-          const matchesStatus = status
-            ? email.subject.toLowerCase() === status.toLowerCase()
-            : true;
-        
-          return matchesQuery && matchesStatus;
-      });
-    }
-
     return{
         query,
-        status,
         isStatusChanged,
         filteredData,
         setQuery,
-        setStatus,
-        setIsStatusChanged
+        setIsStatusChanged,
+        changeStatus
     }
 }

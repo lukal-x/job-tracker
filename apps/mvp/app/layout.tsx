@@ -33,7 +33,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body
-        className={`antialiased`}
+        className={`antialiased bg-accent`}
       >
         <SessionProvider>
           <QueryClientProvider client={queryClient}>

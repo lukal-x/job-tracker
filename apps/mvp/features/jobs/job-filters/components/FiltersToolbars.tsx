@@ -1,20 +1,21 @@
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Filters } from "../types";
-import { MailCheck, Mic, X } from "lucide-react";
+import { Search } from "lucide-react";
 
-export default function FiltersToolbar({ filterType, status,searchTerm, isDisabled, handleSearch, showApplied, showRejected, showInterview, reset }: Filters){
-    
+export default function FiltersToolbar({ filterType,searchTerm, isDisabled, handleSearch, changeStatus}: Filters){
   return (
       <div className="md:flex w-full items-center grid gap-2">
-          <Input disabled={isDisabled} value={searchTerm} onChange={handleSearch} className="w-full h-10 border px-3" placeholder="Search by name. . ." />
+        <div className="relative md:w-full w-96">
+          <Search className="absolute text-gray-400 top-1.5 left-2" />
+          <Input disabled={isDisabled} value={searchTerm} onChange={handleSearch} className="w-full bg-accent h-10 border px-10" placeholder="Search companies..." />
+        </div>
           {filterType === 'JOBS' && (
-            <div className="flex items-center gap-2">
-                <Button disabled={isDisabled} type="button" variant={'outline'} onClick={showApplied} size={'lg'}><MailCheck /> Show Applied</Button>
-                <Button disabled={isDisabled}  type="button" variant={'outline'} onClick={showRejected} size={'lg'}><X /> Show Rejected</Button>
-                <Button disabled={isDisabled}  type="button" variant={'outline'} onClick={showInterview} size={'lg'} ><Mic /> Show Interview</Button>
-                {(status || searchTerm) && <Button disabled={isDisabled} type="button" size={'lg'} onClick={reset}>Reset Filters</Button>}
-            </div>
+            <select defaultValue={""} onChange={(e) => changeStatus(e.target.value)} className={`cursor-pointer h-10 w-28 p-1 border rounded-md bg-accent`}>
+                <option value="">All Status</option>
+                <option value={"APPLIED"}>Applied</option>
+                <option value={"REJECTED"}>Rejected</option>
+                <option value={"INTERVIEW"}>Interview</option>
+            </select>
           )}
         </div>
     )

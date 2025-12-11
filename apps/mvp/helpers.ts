@@ -28,6 +28,9 @@ export function getBadgeLightColor(status: string){
       break;
     case "INTERVIEW":
       badgeColor = "bg-interview text-interview-text"
+      break;
+    case "OFFER":
+      badgeColor = "bg-green-100 text-green-700"
   }
 
   return badgeColor;

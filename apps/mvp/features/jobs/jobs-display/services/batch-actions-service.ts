@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function updateRecordsStatus(ids: string[], status: string){
+export async function updateRecordsStatus(ids: string[], status: "APPLIED" | "REJECTED" | "INTERVIEW" | "OFFER"){
     try{
         return axios.patch('/api/batch', { recordIds: ids, status })
     }

@@ -39,6 +39,7 @@ export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
 
   return (
         <main className="w-full">
+          <form ref={updateFormRef} action={bulkUpdateJobStatuses} className="w-full">
           <section className="w-full grid gap-5 p-5 rounded-lg shadow-md bg-white dark:bg-sidebar">
             <div className="grid gap-1 w-full border-b py-3">
               <h1 className="font-bold text-2xl">Applied Jobs</h1>
@@ -68,7 +69,7 @@ export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
               {isStatusChanged && (
                 <div className="flex gap-2">
                   <Button type="button" onClick={() => { updateFormRef.current?.reset(); setIsStatusChanged(false) } } size={'lg'}><X />Cancel</Button>
-                  <Button size={'lg'} className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
+                  <Button size={'lg'} type="submit" className="bg-green-500 hover:bg-green-600"><Save />Save Changes</Button>
                 </div>
               )}
               </div>
@@ -76,7 +77,6 @@ export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
             </div>
           </section>
 
-          <form ref={updateFormRef} action={bulkUpdateJobStatuses} className="w-full">
           <Table ref={tableRef} className="mt-5 bg-white dark:bg-sidebar rounded-lg shadow-md">
             <TableCaption>A list of your recent job applications.</TableCaption>
             <TableHeader>
@@ -97,10 +97,11 @@ export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
                     <input type="hidden" name="ids" value={job.id} />
                     <select onChange={() => setIsStatusChanged(true)} className={`cursor-pointer w-28 p-1 rounded-2xl ${getBadgeLightColor(job.status)} bg-accent`} defaultValue={job.status} name={`status-${job.id}`}>
                       <option value={job.status}>• {job.status}</option>
-                      {job.status === "APPLIED" ? (
+                      {job.status === "APPLIED" || job.status === "INTERVIEW" ? (
                         <>
                           <option value="REJECTED">REJECTED</option>
                           <option value="INTERVIEW">INTERVIEW</option>
+                          <option value={"OFFER"}>OFFER</option>
                         </>
                       ) : null}
                     </select>

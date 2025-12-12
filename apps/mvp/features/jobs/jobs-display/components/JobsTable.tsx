@@ -23,6 +23,7 @@ import { bulkUpdateJobStatuses } from "../server-actions/bulkUpdateJobStatus"
 import ManuelJobImport from "../../jobs-import/components/ManuelJobImport"
 import ImportGuideModal from "../../jobs-import/components/ImportGuideModal"
 import { getBadgeLightColor } from "@/helpers"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
   const { filteredData: jobsToDisplay, isStatusChanged, query, setQuery, changeStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");
@@ -30,6 +31,7 @@ export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
   const updateFormRef = useRef<HTMLFormElement | null>(null);
   const tableRef = useRef<any>(null);
   const [isTableReady, setIsTableReady] = useState(false);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (tableRef.current) {
@@ -83,8 +85,10 @@ export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
               <TableRow data-html2canvas-ignore>
                 <TableHead><input aria-label="select row for action" data-html2canvas-ignore checked={selectedRows.length === jobs.length} onChange={(e) => checkAllRows(e, jobs)} type="checkbox" /></TableHead>
                 <TableHead className="w-[100px] flex items-center gap-2 font-bold">Company</TableHead>
-                <TableHead className="font-bold">Applied At</TableHead>
-                <TableHead className="font-bold md:static hidden">Status</TableHead>
+                {!isMobile ? (
+                  <TableHead className="font-bold">Applied At</TableHead>
+                ) : null}
+                <TableHead className="font-bold">Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -92,7 +96,7 @@ export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
                 <TableRow className={`${selectedRows.includes(job.id) ? 'bg-accent' : ''}`} key={job.id}>
                   <TableCell><input aria-label="select job for action" data-html2canvas-ignore value={job.id} checked={selectedRows.includes(job.id)} onChange={(e) => checkSingleRow(e, job.id)} type="checkbox" /></TableCell>
                   <TableCell className="font-medium">{job.title}</TableCell>
-                  <TableCell className="font-medium text-muted-foreground md:static hidden">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
+                  <TableCell className="font-medium text-muted-foreground md:flex hidden">{new Date(job.appliedAt).toLocaleDateString()}</TableCell>
                   <TableCell className="dark:text-black">
                     <input type="hidden" name="ids" value={job.id} />
                     <select aria-label="change the status of job" onChange={() => setIsStatusChanged(true)} className={`cursor-pointer w-28 p-1 rounded-2xl ${getBadgeLightColor(job.status)} bg-accent`} defaultValue={job.status} name={`status-${job.id}`}>

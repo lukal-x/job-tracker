@@ -15,6 +15,7 @@ export default function FiltersToolbar({ filterType,searchTerm, isDisabled, hand
                 <option value={"APPLIED"}>Applied</option>
                 <option value={"REJECTED"}>Rejected</option>
                 <option value={"INTERVIEW"}>Interview</option>
+                <option value={"OFFER"}>Offer</option>
             </select>
           )}
         </div>

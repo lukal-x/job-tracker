@@ -41,6 +41,18 @@ export default function ChatbotPage() {
     sessionStorage.setItem("chatMessages", JSON.stringify(messages));
   }, [messages]);
 
+  useEffect(() => {
+    const handleKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'Enter') {
+        sendPrompt(prompt);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeydown);
+
+    return () => document.removeEventListener("keydown", handleKeydown);
+  }, []);
+
   async function sendPrompt(input: string) {
     if (!input.trim()) return;
     setIsLoading(true);
@@ -72,17 +84,17 @@ export default function ChatbotPage() {
     }
   }
     
-  if(isMobile){
-    return(
-      <div className="w-full h-screen flex justify-center items-center">
-        <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
-      </div>
-    )
-  }
+  // if(isMobile){
+  //   return(
+  //     <div className="w-full h-screen flex justify-center items-center">
+  //       <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
+  //     </div>
+  //   )
+  // }
 
   return (
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
-      <div className="w-6xl p-3 grid place-items-center gap-2">
+      <div className="md:w-6xl w-full p-3 grid place-items-center gap-2">
         <div className="w-full grid place-items-start p-5 rounded-lg shadow-md bg-white dark:bg-sidebar">
           <h1 className="text-2xl font-bold">AI Assistant</h1>
           <p className="text-muted-foreground text-sm">Get AI-powered help with your job applications</p>
@@ -132,8 +144,9 @@ export default function ChatbotPage() {
             onChange={(e) => setPrompt(e.target.value)}
             className="max-h-20 rounded-xl bg-accent/40 max-w-[1010px] pr-32"
             placeholder="Type your message..."
+            aria-label="Type your message"
           />
-          <Button className="absolute right-3 h-16 w-20 top-3" onClick={() => sendPrompt(prompt)} size="lg" disabled={isLoading || !token}>
+          <Button aria-label="send the message" name="send-message-button" className="absolute right-3 h-16 w-20 top-3" onClick={() => sendPrompt(prompt)} size="lg" disabled={isLoading || !token}>
             <Send />
           </Button>
         </div>

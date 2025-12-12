@@ -21,13 +21,13 @@ export function getBadgeLightColor(status: string){
 
   switch(status){
     case "APPLIED":
-      badgeColor="bg-applied text-applied-text";
+      badgeColor="bg-applied text-blue-700";
       break;
     case "REJECTED":
-      badgeColor="bg-rejected text-rejected-text";
+      badgeColor="bg-rejected text-red-700";
       break;
     case "INTERVIEW":
-      badgeColor = "bg-interview text-interview-text"
+      badgeColor = "bg-interview text-purple-700"
       break;
     case "OFFER":
       badgeColor = "bg-green-100 text-green-700"

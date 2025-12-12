@@ -35,13 +35,13 @@ export default function StatsPage(){
         )
     }
 
-    if(isMobile){
-        return(
-          <div className="w-full h-screen flex justify-center items-center">
-            <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
-          </div>
-        )
-    }
+    // if(isMobile){
+    //     return(
+    //       <div className="w-full h-screen flex justify-center items-center">
+    //         <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
+    //       </div>
+    //     )
+    // }
 
     return(
         <main className="w-full h-full flex justify-center items-center">

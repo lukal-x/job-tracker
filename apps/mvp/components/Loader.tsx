@@ -10,7 +10,7 @@ const Loader = ({ type }: { type: "NORMAL" | "WAITING_FOR_PDF"}) => {
   
   else return (
     <div className="flex absolute z-50 left-0 top-0 overflow-hidden items-center justify-center w-full h-screen">
-        <Loader2 size={30} className="animate-spin" />
+        <Loader2 size={30} className="animate-spin text-primary" />
     </div>
   )
 }

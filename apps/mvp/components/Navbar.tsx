@@ -3,7 +3,7 @@ import { ModeToggle } from './theme-toggler'
 
 const Navbar = () => {
   return (
-    <div className='w-full h-[60px] absolute z-9999 flex items-center px-10 justify-end'>
+    <div className='absolute right-3 top-3'>
         <ModeToggle />
     </div>
   )

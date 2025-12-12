@@ -6,8 +6,8 @@ import AnimatedNumber from './AnimatedStats'
 
 const JobStatsGrid = ({ data }: { data: StatsData | undefined }) => {
   return (
-    <section className='grid w-full lg:grid-cols-4 gap-3'>
-        <Card className='gird place-items-center text-applied-text'>
+    <section className='grid w-full lg:grid-cols-5 gap-3'>
+        <Card className='gird place-items-center text-blue-500'>
             <CardTitle className='flex items-center gap-2'>
                 <FileText strokeWidth={1} />Total Applied
             </CardTitle>
@@ -34,7 +34,7 @@ const JobStatsGrid = ({ data }: { data: StatsData | undefined }) => {
             </CardContent>
         </Card>
 
-        <Card className='gird place-items-center text-rejected-text'>
+        <Card className='gird place-items-center text-red-400'>
             <CardTitle className='flex gap-2 items-center'>
                 <X strokeWidth={1} />Total Rejections
             </CardTitle>
@@ -55,7 +55,7 @@ const JobStatsGrid = ({ data }: { data: StatsData | undefined }) => {
 
         <Card className='gird place-items-center text-orange-500'>
             <CardTitle className='flex gap-2 items-center'>
-                % Interviews Percentage Rate
+                % Interviews Rate
             </CardTitle>
             <CardContent>
                 <AnimatedNumber value={data?.interviewsPercentage ?? 0} /> %

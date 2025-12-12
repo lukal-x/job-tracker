@@ -28,17 +28,17 @@ export default function Home() {
     )
   }
 
-  if(isMobile){
-    return(
-      <div className="w-full h-screen flex justify-center items-center">
-        <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
-      </div>
-    )
-  }
+  // if(isMobile){
+  //   return(
+  //     <div className="w-full h-screen flex justify-center items-center">
+  //       <h1 className="text-gray-400 text-2xl font-semibold">Please use desktop version for best experience</h1>
+  //     </div>
+  //   )
+  // }
 
   return (
     <main className="w-full h-screen flex justify-center items-start overflow-auto">
-      <div className="md:w-6xl p-3 w-xs grid place-items-center gap-5">
+      <div className="md:w-6xl w-full grid place-items-center gap-5">
         <JobsTable isLoading={isLoading} jobs={data?.jobs ?? []} />
       </div>
     </main>

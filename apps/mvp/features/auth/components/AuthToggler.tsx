@@ -7,8 +7,6 @@ import { Button } from "../../../components/ui/button";
 import { useFirebaseUser } from "@/hooks/useFirebaseUser";
 import { useAuth } from "../hooks/useAuth";
 
-const AVATAR_PLACEHOLDER = "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541";
-
 export default function AuthToggler() {
   const { user, token } = useFirebaseUser();
   const { handleSignIn, handleSignOut } = useAuth();
@@ -17,7 +15,11 @@ export default function AuthToggler() {
     <div>
       <Popover>
         <PopoverTrigger className={`${!token ? 'animate-pulse' : ''} flex cursor-pointer p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-accent/50 items-center gap-2`}>
-          <img className="w-10 h-10 rounded-lg" src={!user ? AVATAR_PLACEHOLDER : user.photoURL as string} alt="" />
+          {user ? (
+            <img className="w-10 h-10 rounded-lg" src={user?.photoURL as string} alt="" />
+          ) : (
+            <span className="font-semibold bg-primary p-2 h-10 w-10 flex items-center justify-center rounded-full">N/A</span>
+          )}
           <div className="grid place-items-start">
            {user ? (
             <>

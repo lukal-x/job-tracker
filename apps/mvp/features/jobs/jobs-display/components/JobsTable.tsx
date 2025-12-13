@@ -26,12 +26,12 @@ import { getBadgeLightColor } from "@/helpers"
 import { useIsMobile } from "@/hooks/use-mobile"
 
 export function JobsTable({ jobs }: { jobs: Job[], isLoading: boolean }) {
+  const [isTableReady, setIsTableReady] = useState(false);
   const { filteredData: jobsToDisplay, isStatusChanged, query, setQuery, changeStatus, setIsStatusChanged } = useFilters(jobs, "JOBS");
   const { checkAllRows, checkSingleRow, selectedRows } = useSelectRows();
+  const isMobile = useIsMobile();
   const updateFormRef = useRef<HTMLFormElement | null>(null);
   const tableRef = useRef<any>(null);
-  const [isTableReady, setIsTableReady] = useState(false);
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     if (tableRef.current) {

@@ -1,52 +1,17 @@
 import { db } from "@/lib/db";
 import { admin } from "@/lib/firebaseAdmin";
 import openai from "@/lib/openaiConfig";
-import { auth } from "firebase-admin";
+import { endOfDay, startOfDay } from "date-fns";
 import { NextResponse } from "next/server";
 
+// *This is need to be refactored, but soon i will migrate whole backend to other technology.
+
 const systemPrompt = `
-You are JobTrackAI — an assistant specialized in job searching, job analysis, and application strategy. 
+You are JobTrakifyAI — an assistant specialized in job searching, job analysis, and application strategy. 
 Your purpose is to help the user plan, optimize, and track their job applications.
 
-Your core abilities:
-
-1. **Analyze Job Descriptions (JD)**
-   - Extract required hard skills, soft skills, tools, responsibilities, seniority level, and company expectations.
-   - Highlight missing skills the user should focus on.
-   - Suggest how the user's CV should reflect the required skills.
-   - Provide a summary of the JD in bullet points.
-
-2. **CV & Cover Letter Optimization**
-   - Suggest improvements to the user’s CV based on a given JD.
-   - Generate sections or bullet points for CV experience.
-   - Rewrite descriptions in a professional tone.
-   - Produce tailored cover letters when asked.
-
-3. **Tracking and Status Management**
-   - Help categorize applications into statuses such as: “Applied”, “Interviewed”, “Offer”, “Rejected”, “Wishlist”.
-   - Suggest next actions the user should take.
-
-4. **Job Search Assistance**
-   - When user asks you to find jobs for them just ask in wich field and then research the web and give links or resources.
-
-5. **Skill Gap Analysis**
-   - Based on the JD, list the skills the user already has (if provided).
-   - List missing or weak areas.
-   - Suggest a learning plan.
-
-6. **Interview Preparation**
-   - Generate custom interview questions based on JD.
-   - Provide example answers tailored to user’s experience.
-   - Suggest improvements for communication.
-
-7. **Professional Messaging**
-   - Write messages for LinkedIn outreach, emails, thank-you follow-ups, recruiter responses, etc.
-
-8. **Portfolio Project Suggestions**
-   - Based on the user’s target role and missing skills, suggest portfolio projects.
-   - Provide detailed implementation plans & feature lists.
-
 Rules:
+- Always ask user if they want your core features: Cover letter generation, their job application stats, or check for interviews.
 - ANSWER ONLY ON JOBS SEARCH RELATED QUESTIONS, AND ALWAYS LEAD CONVERSATION TO JOBS SEARCH TOPICS.
 - Always be concise but helpful.
 - Ask clarifying questions if needed.
@@ -93,7 +58,25 @@ export async function POST(req: Request) {
        }
     })
 
+    const currentDate = new Date();
+    const pastWeekDate = new Date(currentDate);
+    pastWeekDate.setDate(currentDate.getDate() - 30);
+
+    const start = pastWeekDate.toISOString().split('T')[0];
+    const end = currentDate.toISOString().split('T')[0];
+
+    const jobToAnalyze = await db.job.findMany({
+      where: {
+        userId: user?.id,
+        appliedAt: {
+            gte: startOfDay(start),
+            lte: endOfDay(end)
+        }
+    },
+    })
+
     const seriazliedJobsInterviews = JSON.stringify(jobs, null, 2);
+    const serializedJobToAnalyze = JSON.stringify(jobToAnalyze, null, 2);
 
     const response = await openai.chat.completions.create({
       model: "gpt-4.1-mini",
@@ -102,9 +85,10 @@ export async function POST(req: Request) {
             role: "system", 
             content: `Here is the user's personal data to always consider:
 
-            User Profile:
+            User Data:
             - Name: ${user?.username}
             - Interview Calls ${seriazliedJobsInterviews}
+            - Analyze this recent jobs and send statistics or relative info user want ${serializedJobToAnalyze}
 
             Always use this data when generating answers.
             ${systemPrompt}` 

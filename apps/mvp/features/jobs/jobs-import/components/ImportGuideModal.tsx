@@ -8,7 +8,7 @@ const ImportGuideModal = () => {
 
   return (
     <>
-    <button type="button" onClick={() => setIsModalOpen(true)} className="dark:text-gray-400 text-xs flex gap-1 hover:underline cursor-pointer items-center"><Info size={14} /> Click here to see guide</button>
+    <button type="button" onClick={() => setIsModalOpen(true)} className="dark:text-gray-400 text-xs flex gap-1 hover:underline cursor-pointer items-center"><Info size={14} /> Guide</button>
     <AlertDialog onOpenChange={setIsModalOpen} open={isModalOpen}>
         <AlertDialogContent>
             <AlertDialogHeader>

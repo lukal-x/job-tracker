@@ -5,7 +5,7 @@ export async function PATCH(req: Request) {
   try {
     const body = await req.json();
     const { recordIds, status } = body;
-    const allowedValues = ["REJECTED", "INTERVIEW"];
+    const allowedValues = ["REJECTED", "INTERVIEW", "OFFER"];
 
     if (!recordIds || recordIds.length < 1) {
       return NextResponse.json({ error: "Record IDs not found" }, { status: 400 });

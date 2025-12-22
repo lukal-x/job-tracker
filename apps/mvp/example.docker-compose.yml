@@ -21,6 +21,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     user: node
+    networks:
+      - internal
     depends_on:
       - db
     env_file:
@@ -30,3 +32,8 @@ services:
 
 volumes:
   postgres_data:
+
+networks:
+  internal:
+    driver: bridge
+    internal: true
